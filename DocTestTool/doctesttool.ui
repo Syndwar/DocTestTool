@@ -60,7 +60,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>DocTestTool</string>
+   <string>TagiDoci</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="searchBtn">
@@ -214,26 +214,23 @@
      </rect>
     </property>
     <property name="text">
-     <string>T</string>
+     <string>+T</string>
     </property>
     <property name="shortcut">
      <string>T</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="uploadCommentBtn">
+   <widget class="QPushButton" name="searchClearBtn">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>80</y>
+      <x>20</x>
+      <y>70</y>
       <width>41</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>C</string>
-    </property>
-    <property name="shortcut">
-     <string>C</string>
+     <string>X</string>
     </property>
    </widget>
    <widget class="QPushButton" name="uploadDeleteBtn">
@@ -356,9 +353,46 @@
      </rect>
     </property>
     <property name="text">
-     <string>Download</string>
+     <string>Save</string>
+    </property>
+    <property name="shortcut">
+     <string>D</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="fullMatchBox">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>140</y>
+      <width>70</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Full Match</string>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="uploadCommentBtn">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>80</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>+C</string>
+    </property>
+    <property name="shortcut">
+     <string>C</string>
+    </property>
+   </widget>
+   <zorder>uploadCommentsTextEdit</zorder>
+   <zorder>uploadTagsTextEdit</zorder>
    <zorder>editTextWnd</zorder>
    <zorder>searchBtn</zorder>
    <zorder>uploadBtn</zorder>
@@ -368,17 +402,17 @@
    <zorder>uploadCancelBtn</zorder>
    <zorder>uploadOkBtn</zorder>
    <zorder>uploadTagBtn</zorder>
-   <zorder>uploadCommentBtn</zorder>
+   <zorder>searchClearBtn</zorder>
    <zorder>uploadDeleteBtn</zorder>
    <zorder>listWidget</zorder>
    <zorder>uploadAddBtn</zorder>
    <zorder>searchTextEdit</zorder>
    <zorder>searchFindBtn</zorder>
    <zorder>searchCancelBtn</zorder>
-   <zorder>uploadCommentsTextEdit</zorder>
-   <zorder>uploadTagsTextEdit</zorder>
    <zorder>tagsListWidget</zorder>
    <zorder>searchDownloadBtn</zorder>
+   <zorder>fullMatchBox</zorder>
+   <zorder>uploadCommentBtn</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

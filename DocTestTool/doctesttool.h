@@ -20,12 +20,12 @@ private:
 
     ViewMode m_viewMode;
 
-    QStringList m_defaultTags;
-    QMap<QString, QStringList> m_templates;
-    int m_docsCount;
-    QList<DocInfo> m_loadedDocsData;
-    QList<DocInfo> m_folderDocsData;
-    QList<DocInfo> m_foundDocsData;
+    QStringList m_defaultTags; // list of default tags
+    QMap<QString, QStringList> m_templates; // templates with tag lists
+    int m_docsCount; // amount of files found in the folder
+    QList<DocInfo> m_loadedDocsData;  // files that are loaded into application and are processed
+    QList<DocInfo> m_folderDocsData; // files that are stored in the app folder
+    QList<DocInfo> m_foundDocsData; // files that are found using search filter
 
 public:
     DocTestTool(QWidget *parent = 0);
@@ -39,6 +39,8 @@ public:
     void loadConfig();
     void loadFilesData();
     void loadDocsRepo(QStringList & fileNames);
+    void doGreedySearch();
+    void doStrictSearch();
 public slots:
     void OnEditButtonClicked();
     void OnUploadButtonClicked();
@@ -52,6 +54,7 @@ public slots:
     void OnUploadCommentButtonClicked();
     void OnUploadAddButtonClicked();
     void onSearchDownloadButtonClicked();
+    void onSearchClearButtonClicked();
     void onSearchFindButtonClicked();
     void onSearchBackButtonClicked();
     void OnTagsListDoubleClicked(QListWidgetItem * item);

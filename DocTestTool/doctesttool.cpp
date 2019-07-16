@@ -14,7 +14,8 @@ const char * const kInfoDocFile = "info.json";
 const char * const kComment = "comment";
 const char * const kFilename = "filename";
 const char * const kTags = "tags";
-const QString kUploadFilters = "Documents (*.pdf *.xml)";
+const QString kUploadFilters = "Documents (*.pdf *.tiff);;Images (*.jpg *.jpeg *.png);;Data Only (*.txt *json *html);;XML (*.xml);;All files (*.*)";
+const char * const kDelimiter = ", ";
 }
 
 struct DocInfo
@@ -66,8 +67,9 @@ DocTestTool::DocTestTool(QWidget * parent)
 
     QObject::connect(ui.searchFindBtn, SIGNAL(clicked()), this, SLOT(onSearchFindButtonClicked()));
     QObject::connect(ui.searchDownloadBtn, SIGNAL(clicked()), this, SLOT(onSearchDownloadButtonClicked()));
+    QObject::connect(ui.searchClearBtn, SIGNAL(clicked()), this, SLOT(onSearchClearButtonClicked()));
 
-    QObject::connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnTagsListDoubleClicked(QListWidgetItem *)));
+    QObject::connect(ui.tagsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnTagsListDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(OnListWidgetClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnListWidgetDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.searchCancelBtn, SIGNAL(clicked()), this, SLOT(onSearchBackButtonClicked()));
@@ -230,7 +232,7 @@ void DocTestTool::viewMainScreen(const bool value)
 void DocTestTool::viewSearchScreen(const bool value)
 {
     if (value) m_viewMode = ViewMode::Search;
-    ui.listWidget->clear();
+    ui.tagsListWidget->clear();
 
     for (QString & tag : m_defaultTags)
     {
@@ -240,7 +242,9 @@ void DocTestTool::viewSearchScreen(const bool value)
     auto it = m_templates.constBegin();
     while (it != m_templates.constEnd())
     {
-        ui.tagsListWidget->addItem(it.key());
+        QListWidgetItem * item = new QListWidgetItem(it.key());
+        item->setTextColor("blue");
+        ui.tagsListWidget->addItem(item);
         ++it;
     }
 
@@ -251,6 +255,8 @@ void DocTestTool::viewSearchScreen(const bool value)
     ui.searchCancelBtn->setVisible(value);
     ui.searchDownloadBtn->setVisible(value);
     ui.tagsListWidget->setVisible(value);
+    ui.searchClearBtn->setVisible(value);
+    ui.fullMatchBox->setVisible(value);
 }
 
 void DocTestTool::viewUploadScreen(const bool value)
@@ -370,13 +376,36 @@ void DocTestTool::OnEditCancelButtonClicked()
 //========================================
 void DocTestTool::OnUploadOkButtonClicked()
 {
+    // check if all documents has tags
+    int missingTagIndex = -1;
+    for (DocInfo & info : m_loadedDocsData)
+    {
+        ++missingTagIndex;
+        if (info.tags.empty())
+        {
+            break;
+        }
+    }
+    // if tag is missing than set colour to red and scroll to this item
+    if (missingTagIndex >= 0)
+    {
+        QListWidgetItem * item = ui.listWidget->item(missingTagIndex);
+        item->setTextColor("red");
+        ui.listWidget->scrollToItem(item);
+
+        ui.statusBar->setStyleSheet("color: red");
+        ui.statusBar->showMessage("Tag is missing!", 2000);
+        return;
+    }
+
     for (DocInfo & info : m_loadedDocsData)
     {
         QFile file(info.filePath);
         QFileInfo fileInfo(file);
 
         QString folderPath(getDocsFilePath());
-        folderPath.append("/").append(QString::number(++m_docsCount));
+        ++m_docsCount;
+        folderPath.append("/").append(QString::number(m_docsCount));
         if (!QDir(folderPath).exists())
         {
             QDir().mkdir(folderPath);
@@ -454,7 +483,7 @@ void DocTestTool::OnUploadTagButtonClicked()
         if (i < m_loadedDocsData.size())
         {
             DocInfo & info = m_loadedDocsData[i];
-            info.tags = ui.uploadTagsTextEdit->text().split(" ");
+            info.tags = ui.uploadTagsTextEdit->text().split(kDelimiter);
         }
     }
 }
@@ -499,7 +528,7 @@ void DocTestTool::OnListWidgetClicked(QListWidgetItem * item)
         {
             const DocInfo & info = m_loadedDocsData[i];
             ui.uploadCommentsTextEdit->setText(info.comment);
-            ui.uploadTagsTextEdit->setText(info.tags.join(" "));
+            ui.uploadTagsTextEdit->setText(info.tags.join(kDelimiter));
         }
     }
 }
@@ -507,6 +536,11 @@ void DocTestTool::OnListWidgetClicked(QListWidgetItem * item)
 //========================================
 // Search screen
 //========================================
+void DocTestTool::onSearchClearButtonClicked()
+{
+    ui.searchTextEdit->clear();
+}
+
 void DocTestTool::onSearchDownloadButtonClicked()
 {
 
@@ -522,28 +556,54 @@ void DocTestTool::OnTagsListDoubleClicked(QListWidgetItem * item)
         auto it = m_templates.find(key);
         if (it != m_templates.constEnd())
         {
-            ui.searchTextEdit->setText(it.value().join(" "));
+            ui.searchTextEdit->setText(it.value().join(kDelimiter));
         }
         else
         {
-            ui.searchTextEdit->setText(key);
+            QString curText = ui.searchTextEdit->text();
+            if (curText.isEmpty())
+            {
+                ui.searchTextEdit->setText(key);
+            }
+            else
+            {
+                ui.searchTextEdit->setText(curText.append(kDelimiter).append(key));
+            }
         }
     }
 }
 
 void DocTestTool::onSearchFindButtonClicked()
 {
+    ui.listWidget->clear();
     m_foundDocsData.clear();
 
+    if (ui.fullMatchBox->isChecked())
+    {
+        doStrictSearch();
+    }
+    else
+    {
+        doGreedySearch();
+    }
+
+    for (DocInfo & info : m_foundDocsData)
+    {
+        ui.listWidget->addItem(info.fileName);
+    }
+}
+
+void DocTestTool::doGreedySearch()
+{
     const QString findText = ui.searchTextEdit->text();
     if (!findText.isEmpty())
     {
         const QString editText = ui.searchTextEdit->text();
         ui.searchTextEdit->clear();
 
-        const QStringList searchTags = editText.split(" ");
+        const QStringList searchTags = editText.split(kDelimiter);
 
-        for (DocInfo & info : m_loadedDocsData)
+        for (DocInfo & info : m_folderDocsData)
         {
             for (const QString & tag : searchTags)
             {
@@ -552,6 +612,35 @@ void DocTestTool::onSearchFindButtonClicked()
                     m_foundDocsData.append(info);
                     break;
                 }
+            }
+        }
+    }
+}
+
+void DocTestTool::doStrictSearch()
+{
+    const QString findText = ui.searchTextEdit->text();
+    if (!findText.isEmpty())
+    {
+        const QString editText = ui.searchTextEdit->text();
+        ui.searchTextEdit->clear();
+
+        const QStringList searchTags = editText.split(kDelimiter);
+
+        for (DocInfo & info : m_folderDocsData)
+        {
+            bool isValid = true;
+            for (const QString & tag : searchTags)
+            {
+                if (!info.tags.contains(tag))
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid)
+            {
+                m_foundDocsData.append(info);
             }
         }
     }
