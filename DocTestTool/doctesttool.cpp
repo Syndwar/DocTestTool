@@ -4,6 +4,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "quazip.h"
+#include "quazipfile.h"
+#include "quazipnewinfo.h"
 
 namespace
 {
@@ -65,9 +68,10 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.uploadCommentBtn, SIGNAL(clicked()), this, SLOT(OnUploadCommentButtonClicked()));
     QObject::connect(ui.uploadAddBtn, SIGNAL(clicked()), this, SLOT(OnUploadAddButtonClicked()));
 
-    QObject::connect(ui.searchFindBtn, SIGNAL(clicked()), this, SLOT(onSearchFindButtonClicked()));
+    QObject::connect(ui.findTagBtn, SIGNAL(clicked()), this, SLOT(onSearchFindButtonClicked()));
     QObject::connect(ui.searchDownloadBtn, SIGNAL(clicked()), this, SLOT(onSearchDownloadButtonClicked()));
-    QObject::connect(ui.searchClearBtn, SIGNAL(clicked()), this, SLOT(onSearchClearButtonClicked()));
+    QObject::connect(ui.clearTagBtn, SIGNAL(clicked()), this, SLOT(onClearTagButtonClicked()));
+    QObject::connect(ui.clearCommentBtn, SIGNAL(clicked()), this, SLOT(onClearCommentButtonClicked()));
 
     QObject::connect(ui.tagsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnTagsListDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(OnListWidgetClicked(QListWidgetItem *)));
@@ -104,6 +108,20 @@ DocTestTool::DocTestTool(QWidget * parent)
 
     loadConfig();
     loadFilesData();
+
+    tuneView();
+}
+
+void DocTestTool::tuneView()
+{
+    //ui.searchCancelBtn->setStyleSheet(QString("background-color: red"));
+    //ui.uploadCancelBtn->setStyleSheet(QString("background-color: red"));
+    //ui.editCancelBtn->setStyleSheet(QString("background-color: red"));
+    //ui.searchDownloadBtn->setStyleSheet(QString("background-color: green; color:white"));
+    //ui.editSaveBtn->setStyleSheet(QString("background-color: green; color:white"));
+    //ui.uploadOkBtn->setStyleSheet(QString("background-color: green; color:white"));
+    //ui.findTagBtn->setStyleSheet(QString("background-color: blue; color:white"));
+    //ui.findCommentBtn->setStyleSheet(QString("background-color: blue; color:white"));
 }
 
 void DocTestTool::loadConfig()
@@ -232,6 +250,47 @@ void DocTestTool::viewMainScreen(const bool value)
 void DocTestTool::viewSearchScreen(const bool value)
 {
     if (value) m_viewMode = ViewMode::Search;
+
+    updateTagsListWidget();
+    ui.listWidget->clear();
+    ui.uploadTagsTextEdit->clear();
+    ui.uploadCommentsTextEdit->clear();
+    ui.findTagBtn->setVisible(value);
+    ui.findCommentBtn->setVisible(value);
+    ui.uploadTagsTextEdit->setVisible(value);
+    ui.uploadCommentsTextEdit->setVisible(value);
+    ui.listWidget->setVisible(value);
+    ui.searchCancelBtn->setVisible(value);
+    ui.searchDownloadBtn->setVisible(value);
+    ui.tagsListWidget->setVisible(value);
+    ui.clearTagBtn->setVisible(value);
+    ui.clearCommentBtn->setVisible(value);
+    ui.fullMatchBox->setVisible(value);
+    ui.uploadDeleteBtn->setVisible(value);
+}
+
+void DocTestTool::viewUploadScreen(const bool value)
+{
+    if (value) m_viewMode = ViewMode::Upload;
+
+    updateTagsListWidget();
+
+    ui.listWidget->setVisible(value);
+    ui.uploadOkBtn->setVisible(value);
+    ui.uploadCancelBtn->setVisible(value);
+    ui.uploadTagBtn->setVisible(value);
+    ui.uploadCommentBtn->setVisible(value);
+    ui.uploadDeleteBtn->setVisible(value);
+    ui.uploadAddBtn->setVisible(value);
+    ui.uploadTagsTextEdit->setVisible(value);
+    ui.uploadCommentsTextEdit->setVisible(value);
+    ui.tagsListWidget->setVisible(value);
+    ui.clearTagBtn->setVisible(value);
+    ui.clearCommentBtn->setVisible(value);
+}
+
+void DocTestTool::updateTagsListWidget()
+{
     ui.tagsListWidget->clear();
 
     for (QString & tag : m_defaultTags)
@@ -247,31 +306,6 @@ void DocTestTool::viewSearchScreen(const bool value)
         ui.tagsListWidget->addItem(item);
         ++it;
     }
-
-    ui.searchTextEdit->clear();
-    ui.searchFindBtn->setVisible(value);
-    ui.searchTextEdit->setVisible(value);
-    ui.listWidget->setVisible(value);
-    ui.searchCancelBtn->setVisible(value);
-    ui.searchDownloadBtn->setVisible(value);
-    ui.tagsListWidget->setVisible(value);
-    ui.searchClearBtn->setVisible(value);
-    ui.fullMatchBox->setVisible(value);
-}
-
-void DocTestTool::viewUploadScreen(const bool value)
-{
-    if (value) m_viewMode = ViewMode::Upload;
-
-    ui.listWidget->setVisible(value);
-    ui.uploadOkBtn->setVisible(value);
-    ui.uploadCancelBtn->setVisible(value);
-    ui.uploadTagBtn->setVisible(value);
-    ui.uploadCommentBtn->setVisible(value);
-    ui.uploadDeleteBtn->setVisible(value);
-    ui.uploadAddBtn->setVisible(value);
-    ui.uploadTagsTextEdit->setVisible(value);
-    ui.uploadCommentsTextEdit->setVisible(value);
 }
 
 void DocTestTool::viewEditScreen(const bool value)
@@ -378,11 +412,12 @@ void DocTestTool::OnUploadOkButtonClicked()
 {
     // check if all documents has tags
     int missingTagIndex = -1;
-    for (DocInfo & info : m_loadedDocsData)
+    for (int i = 0, iEnd = m_loadedDocsData.size(); i < iEnd; ++i)
     {
-        ++missingTagIndex;
+        DocInfo & info = m_loadedDocsData[i];
         if (info.tags.empty())
         {
+            missingTagIndex = i;
             break;
         }
     }
@@ -431,6 +466,7 @@ void DocTestTool::OnUploadOkButtonClicked()
             }
         }
     }
+    loadFilesData();
     ui.listWidget->clear();
     viewUploadScreen(false);
     viewMainScreen(true);
@@ -470,10 +506,11 @@ void DocTestTool::OnUploadDeleteButtonClicked()
 
 void DocTestTool::OnUploadTagButtonClicked()
 {
+    const QString text = ui.uploadTagsTextEdit->text();
     QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
     for (QListWidgetItem * item : selectedWidgets)
     {
-        item->setTextColor("blue");
+        item->setTextColor(text.isEmpty() ? "black" : "blue");
     }
 
     QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
@@ -483,17 +520,18 @@ void DocTestTool::OnUploadTagButtonClicked()
         if (i < m_loadedDocsData.size())
         {
             DocInfo & info = m_loadedDocsData[i];
-            info.tags = ui.uploadTagsTextEdit->text().split(kDelimiter);
+            info.tags = text.split(kDelimiter);
         }
     }
 }
 
 void DocTestTool::OnUploadCommentButtonClicked()
 {
+    const QString text = ui.uploadCommentsTextEdit->text();
     QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
     for (QListWidgetItem * item : selectedWidgets)
     {
-        item->setTextColor("green");
+        item->setTextColor(text.isEmpty() ? "black" : "green");
     }
 
     QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
@@ -503,7 +541,7 @@ void DocTestTool::OnUploadCommentButtonClicked()
         if (i < m_loadedDocsData.size())
         {
             DocInfo & info = m_loadedDocsData[i];
-            info.comment = ui.uploadCommentsTextEdit->text();
+            info.comment = text;
         }
     }
 }
@@ -536,19 +574,54 @@ void DocTestTool::OnListWidgetClicked(QListWidgetItem * item)
 //========================================
 // Search screen
 //========================================
-void DocTestTool::onSearchClearButtonClicked()
+void DocTestTool::onClearCommentButtonClicked()
 {
-    ui.searchTextEdit->clear();
+    ui.uploadCommentsTextEdit->clear();
+}
+
+void DocTestTool::onClearTagButtonClicked()
+{
+    ui.uploadTagsTextEdit->clear();
 }
 
 void DocTestTool::onSearchDownloadButtonClicked()
 {
+    if (m_foundDocsData.size() == 0) return;
 
+    char c;
+    const QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "documents.zip");
+    if (!fileName.isEmpty())
+    {
+        QuaZip zip(fileName);
+        if (zip.open(QuaZip::mdCreate))
+        {
+            int i = 0;
+            for (DocInfo & info : m_foundDocsData)
+            {
+                QFile inFile(info.filePath);
+                if (inFile.open(QIODevice::ReadOnly))
+                {
+                    QString zipPath = QString::number(++i).append("/").append(info.fileName);
+                    QuaZipNewInfo zipInfo(zipPath, info.filePath);
+                    QuaZipFile zipFile(&zip);
+                    if (zipFile.open(QIODevice::WriteOnly, zipInfo))
+                    {
+                        while (inFile.getChar(&c) && zipFile.putChar(c));
+                        zipFile.close();
+                    }
+                    inFile.close();
+                }
+            }
+            zip.close();
+        }
+    }
 }
 
 void DocTestTool::OnTagsListDoubleClicked(QListWidgetItem * item)
 {
-    if (ViewMode::Search != m_viewMode) return;
+    if (ViewMode::Search != m_viewMode && ViewMode::Upload != m_viewMode) return;
+    
+    QLineEdit * editText = ui.uploadTagsTextEdit;
 
     const QString key = item->text();
     if (!key.isEmpty())
@@ -556,18 +629,18 @@ void DocTestTool::OnTagsListDoubleClicked(QListWidgetItem * item)
         auto it = m_templates.find(key);
         if (it != m_templates.constEnd())
         {
-            ui.searchTextEdit->setText(it.value().join(kDelimiter));
+            editText->setText(it.value().join(kDelimiter));
         }
         else
         {
-            QString curText = ui.searchTextEdit->text();
+            QString curText = editText->text();
             if (curText.isEmpty())
             {
-                ui.searchTextEdit->setText(key);
+                editText->setText(key);
             }
             else
             {
-                ui.searchTextEdit->setText(curText.append(kDelimiter).append(key));
+                editText->setText(curText.append(kDelimiter).append(key));
             }
         }
     }
@@ -595,12 +668,10 @@ void DocTestTool::onSearchFindButtonClicked()
 
 void DocTestTool::doGreedySearch()
 {
-    const QString findText = ui.searchTextEdit->text();
+    const QString findText = ui.uploadTagsTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QString editText = ui.searchTextEdit->text();
-        ui.searchTextEdit->clear();
-
+        const QString editText = ui.uploadTagsTextEdit->text();
         const QStringList searchTags = editText.split(kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
@@ -619,12 +690,10 @@ void DocTestTool::doGreedySearch()
 
 void DocTestTool::doStrictSearch()
 {
-    const QString findText = ui.searchTextEdit->text();
+    const QString findText = ui.uploadTagsTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QString editText = ui.searchTextEdit->text();
-        ui.searchTextEdit->clear();
-
+        const QString editText = ui.uploadTagsTextEdit->text();
         const QStringList searchTags = editText.split(kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)

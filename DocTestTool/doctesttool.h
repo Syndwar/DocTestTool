@@ -36,11 +36,13 @@ public:
     void viewUploadScreen(const bool value);
     void viewSearchScreen(const bool value);
     void viewEditScreen(const bool value);
+    void tuneView();
     void loadConfig();
     void loadFilesData();
     void loadDocsRepo(QStringList & fileNames);
     void doGreedySearch();
     void doStrictSearch();
+    void updateTagsListWidget();
 public slots:
     void OnEditButtonClicked();
     void OnUploadButtonClicked();
@@ -54,7 +56,8 @@ public slots:
     void OnUploadCommentButtonClicked();
     void OnUploadAddButtonClicked();
     void onSearchDownloadButtonClicked();
-    void onSearchClearButtonClicked();
+    void onClearCommentButtonClicked();
+    void onClearTagButtonClicked();
     void onSearchFindButtonClicked();
     void onSearchBackButtonClicked();
     void OnTagsListDoubleClicked(QListWidgetItem * item);

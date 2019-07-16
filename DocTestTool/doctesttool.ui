@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>680</width>
     <height>480</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>640</width>
+    <width>680</width>
     <height>480</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>640</width>
+    <width>680</width>
     <height>480</height>
    </size>
   </property>
@@ -66,8 +66,8 @@
    <widget class="QPushButton" name="searchBtn">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>70</y>
+      <x>280</x>
+      <y>75</y>
       <width>120</width>
       <height>60</height>
      </rect>
@@ -82,8 +82,8 @@
    <widget class="QPushButton" name="uploadBtn">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>160</y>
+      <x>280</x>
+      <y>180</y>
       <width>120</width>
       <height>60</height>
      </rect>
@@ -98,8 +98,8 @@
    <widget class="QPushButton" name="editBtn">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>250</y>
+      <x>280</x>
+      <y>285</y>
       <width>120</width>
       <height>60</height>
      </rect>
@@ -127,14 +127,14 @@
    <widget class="QPushButton" name="editSaveBtn">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>630</x>
       <y>330</y>
-      <width>120</width>
-      <height>40</height>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="text">
-     <string>Save</string>
+     <string>Ok</string>
     </property>
     <property name="shortcut">
      <string>S</string>
@@ -143,14 +143,14 @@
    <widget class="QPushButton" name="editCancelBtn">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>330</y>
-      <width>120</width>
-      <height>40</height>
+      <x>630</x>
+      <y>390</y>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="text">
-     <string>Cancel</string>
+     <string>Back</string>
     </property>
     <property name="shortcut">
      <string>Esc</string>
@@ -159,9 +159,9 @@
    <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>370</x>
       <y>10</y>
-      <width>261</width>
+      <width>251</width>
       <height>421</height>
      </rect>
     </property>
@@ -175,14 +175,17 @@
    <widget class="QPushButton" name="uploadCancelBtn">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>630</x>
       <y>390</y>
-      <width>120</width>
-      <height>40</height>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
     <property name="text">
-     <string>Cancel</string>
+     <string>Back</string>
     </property>
     <property name="shortcut">
      <string>Esc</string>
@@ -191,55 +194,55 @@
    <widget class="QPushButton" name="uploadOkBtn">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>390</y>
-      <width>120</width>
-      <height>40</height>
+      <x>630</x>
+      <y>330</y>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="text">
      <string>Ok</string>
     </property>
-    <property name="shortcut">
-     <string>Return</string>
-    </property>
    </widget>
    <widget class="QPushButton" name="uploadTagBtn">
     <property name="geometry">
      <rect>
-      <x>279</x>
-      <y>29</y>
-      <width>41</width>
-      <height>41</height>
+      <x>10</x>
+      <y>30</y>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="text">
-     <string>+T</string>
+     <string>Set</string>
     </property>
     <property name="shortcut">
      <string>T</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="searchClearBtn">
+   <widget class="QPushButton" name="clearTagBtn">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>70</y>
-      <width>41</width>
-      <height>41</height>
+      <x>310</x>
+      <y>30</y>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
     <property name="text">
-     <string>X</string>
+     <string>Clear</string>
     </property>
    </widget>
    <widget class="QPushButton" name="uploadDeleteBtn">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>130</y>
-      <width>41</width>
-      <height>41</height>
+      <x>630</x>
+      <y>10</y>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="text">
@@ -252,10 +255,10 @@
    <widget class="QPushButton" name="uploadAddBtn">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>180</y>
-      <width>41</width>
-      <height>41</height>
+      <x>630</x>
+      <y>60</y>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="text">
@@ -265,40 +268,33 @@
      <string>A</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="searchTextEdit">
+   <widget class="QPushButton" name="findTagBtn">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>301</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="searchFindBtn">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>70</y>
-      <width>120</width>
-      <height>40</height>
+      <x>10</x>
+      <y>30</y>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="text">
      <string>Find</string>
     </property>
     <property name="shortcut">
-     <string>Return</string>
+     <string>T</string>
     </property>
    </widget>
    <widget class="QPushButton" name="searchCancelBtn">
     <property name="geometry">
      <rect>
-      <x>110</x>
-      <y>130</y>
-      <width>120</width>
-      <height>40</height>
+      <x>630</x>
+      <y>390</y>
+      <width>42</width>
+      <height>42</height>
      </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
     </property>
     <property name="text">
      <string>Back</string>
@@ -310,29 +306,38 @@
    <widget class="QLineEdit" name="uploadCommentsTextEdit">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>60</x>
       <y>80</y>
       <width>241</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="placeholderText">
+     <string>Enter comments here</string>
+    </property>
    </widget>
    <widget class="QLineEdit" name="uploadTagsTextEdit">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>60</x>
       <y>30</y>
       <width>241</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="whatsThis">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>Enter tags here</string>
+    </property>
    </widget>
    <widget class="QListWidget" name="tagsListWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>250</y>
-      <width>301</width>
+      <x>10</x>
+      <y>140</y>
+      <width>351</width>
       <height>181</height>
      </rect>
     </property>
@@ -346,30 +351,33 @@
    <widget class="QPushButton" name="searchDownloadBtn">
     <property name="geometry">
      <rect>
-      <x>110</x>
-      <y>190</y>
-      <width>120</width>
-      <height>40</height>
+      <x>630</x>
+      <y>330</y>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="text">
      <string>Save</string>
     </property>
     <property name="shortcut">
-     <string>D</string>
+     <string>S</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="fullMatchBox">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>140</y>
+      <x>60</x>
+      <y>10</y>
       <width>70</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
      <string>Full Match</string>
+    </property>
+    <property name="shortcut">
+     <string>F</string>
     </property>
     <property name="checked">
      <bool>false</bool>
@@ -378,40 +386,73 @@
    <widget class="QPushButton" name="uploadCommentBtn">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>10</x>
       <y>80</y>
-      <width>41</width>
-      <height>41</height>
+      <width>42</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="text">
-     <string>+C</string>
+     <string>Set</string>
     </property>
     <property name="shortcut">
      <string>C</string>
     </property>
    </widget>
-   <zorder>uploadCommentsTextEdit</zorder>
-   <zorder>uploadTagsTextEdit</zorder>
+   <widget class="QPushButton" name="clearCommentBtn">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>80</y>
+      <width>42</width>
+      <height>42</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="findCommentBtn">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>42</width>
+      <height>42</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Find</string>
+    </property>
+    <property name="shortcut">
+     <string>C</string>
+    </property>
+   </widget>
+   <zorder>uploadAddBtn</zorder>
    <zorder>editTextWnd</zorder>
+   <zorder>tagsListWidget</zorder>
+   <zorder>listWidget</zorder>
+   <zorder>editBtn</zorder>
    <zorder>searchBtn</zorder>
    <zorder>uploadBtn</zorder>
-   <zorder>editBtn</zorder>
+   <zorder>searchDownloadBtn</zorder>
+   <zorder>searchCancelBtn</zorder>
+   <zorder>uploadCommentsTextEdit</zorder>
+   <zorder>uploadTagsTextEdit</zorder>
    <zorder>editSaveBtn</zorder>
    <zorder>editCancelBtn</zorder>
    <zorder>uploadCancelBtn</zorder>
    <zorder>uploadOkBtn</zorder>
-   <zorder>uploadTagBtn</zorder>
-   <zorder>searchClearBtn</zorder>
+   <zorder>clearTagBtn</zorder>
    <zorder>uploadDeleteBtn</zorder>
-   <zorder>listWidget</zorder>
-   <zorder>uploadAddBtn</zorder>
-   <zorder>searchTextEdit</zorder>
-   <zorder>searchFindBtn</zorder>
-   <zorder>searchCancelBtn</zorder>
-   <zorder>tagsListWidget</zorder>
-   <zorder>searchDownloadBtn</zorder>
+   <zorder>findTagBtn</zorder>
    <zorder>fullMatchBox</zorder>
+   <zorder>clearCommentBtn</zorder>
+   <zorder>findCommentBtn</zorder>
+   <zorder>uploadTagBtn</zorder>
    <zorder>uploadCommentBtn</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -419,7 +460,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
+     <width>680</width>
      <height>21</height>
     </rect>
    </property>
