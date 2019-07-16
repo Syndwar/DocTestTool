@@ -419,6 +419,12 @@ void DocTestTool::OnUploadAddButtonClicked()
 
 void DocTestTool::OnUploadDeleteButtonClicked()
 {
+    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    for (QModelIndex & index : indexes)
+    {
+        const int i = index.row();
+        m_loadedDocsData.removeAt(i);
+    }
     QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
     for (QListWidgetItem * item : selectedWidgets)
     {
