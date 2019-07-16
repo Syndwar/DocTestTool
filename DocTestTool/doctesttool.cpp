@@ -11,8 +11,19 @@ const char * const kBaseFolder = "base";
 const char * const kDocsFolder = "docs";
 const char * const kDefaultTagsFile = "config.json";
 const char * const kInfoDocFile = "info.json";
-const QStringList kUploadFilters = { "Pdf files (*.pdf)", "XML files (*.xml)" ,"Image files (*.png *.xpm *.jpg)", "Text files (*.txt)", "Any files (*)" };
+const char * const kComment = "comment";
+const char * const kFilename = "filename";
+const char * const kTags = "tags";
+const QString kUploadFilters = "Documents (*.pdf *.xml)";
 }
+
+struct DocInfo
+{
+    QString filePath;
+    QString fileName;
+    QList<QString> tags;
+    QString comment;
+};
 
 QString getConfigFilePath()
 {
@@ -55,6 +66,7 @@ DocTestTool::DocTestTool(QWidget * parent)
 
     QObject::connect(ui.searchFindBtn, SIGNAL(clicked()), this, SLOT(onSearchFindButtonClicked()));
 
+    QObject::connect(ui.listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(OnListWidgetClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnListWidgetDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.searchCancelBtn, SIGNAL(clicked()), this, SLOT(onSearchBackButtonClicked()));
 
@@ -75,7 +87,7 @@ DocTestTool::DocTestTool(QWidget * parent)
     QFile tagsFile(getConfigFilePath());
     if (!tagsFile.exists())
     {
-        const QString val = "{}";
+        const QString val = "{\"tags\":[], \"comment\":\"\"}";
         QJsonDocument jsonDoc = QJsonDocument::fromJson(val.toUtf8());
         QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
 
@@ -102,7 +114,7 @@ void DocTestTool::loadConfig()
         if (!obj.isEmpty())
         {
             // load default tags
-            QJsonValue tagsValue = obj["tags"];
+            QJsonValue tagsValue = obj[kTags];
             if (tagsValue.isArray())
             {
                 QJsonArray array = tagsValue.toArray();
@@ -132,6 +144,8 @@ void DocTestTool::loadConfig()
 
 void DocTestTool::loadFilesData()
 {
+    m_folderDocsData.clear();
+
     QDir docsDir(getDocsFilePath());
     QFileInfoList infoList = docsDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
     m_docsCount = infoList.size();
@@ -139,7 +153,58 @@ void DocTestTool::loadFilesData()
     {
         QFileInfo & info = infoList[i];
         QString path = info.absoluteFilePath();
-        // TODO create files data in the application
+        QFile infoFile(QDir(path).absoluteFilePath(kInfoDocFile));
+        if (infoFile.open(QIODevice::ReadOnly))
+        {
+            QByteArray fileData = infoFile.readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(fileData);
+            QJsonObject obj = jsonDoc.object();
+            if (!obj.isEmpty())
+            {
+                DocInfo docInfo;
+                // load default tags
+                QJsonValue tagsValue = obj[kTags];
+                if (tagsValue.isArray())
+                {
+                    QJsonArray array = tagsValue.toArray();
+                    for (int i = 0, iEnd = array.size(); i < iEnd; ++i)
+                    {
+                        docInfo.tags.push_back(array[i].toString());
+                    }
+                }
+                // load templates
+                QJsonValue commentValue = obj[kComment];
+                if (commentValue.isString())
+                {
+                    docInfo.comment = commentValue.toString();
+                }
+                QJsonValue fileValue = obj[kFilename];
+                if (fileValue.isString())
+                {
+                    docInfo.fileName = fileValue.toString();
+                }
+
+                m_folderDocsData.append(docInfo);
+            }
+            infoFile.close();
+        }
+    }
+
+
+
+}
+
+void DocTestTool::loadDocsRepo(QStringList & fileNames)
+{
+    for (QString & fileName : fileNames)
+    {
+        QFile file(fileName);
+        QFileInfo info(file);
+        
+        DocInfo docInfo;
+        docInfo.filePath = fileName;
+        docInfo.fileName = info.fileName();
+        m_loadedDocsData.append(docInfo);
     }
 }
 
@@ -162,6 +227,12 @@ void DocTestTool::viewSearchScreen(const bool value)
 {
     if (value) m_viewMode = ViewMode::Search;
     ui.listWidget->clear();
+
+    for (QString & tag : m_defaultTags)
+    {
+        ui.listWidget->addItem(tag);
+    }
+
     auto it = m_templates.constBegin();
     while (it != m_templates.constEnd())
     {
@@ -179,6 +250,7 @@ void DocTestTool::viewSearchScreen(const bool value)
 void DocTestTool::viewUploadScreen(const bool value)
 {
     if (value) m_viewMode = ViewMode::Upload;
+
     ui.listWidget->setVisible(value);
     ui.uploadOkBtn->setVisible(value);
     ui.uploadCancelBtn->setVisible(value);
@@ -186,6 +258,8 @@ void DocTestTool::viewUploadScreen(const bool value)
     ui.uploadCommentBtn->setVisible(value);
     ui.uploadDeleteBtn->setVisible(value);
     ui.uploadAddBtn->setVisible(value);
+    ui.uploadTagsTextEdit->setVisible(value);
+    ui.uploadCommentsTextEdit->setVisible(value);
 }
 
 void DocTestTool::viewEditScreen(const bool value)
@@ -218,17 +292,17 @@ void DocTestTool::OnSearchButtonClicked()
 
 void DocTestTool::OnUploadButtonClicked()
 {
-    QFileDialog dialog(this);
-    dialog.setNameFilters(kUploadFilters);
-    QStringList fileNames = dialog.getOpenFileNames();
+    ui.listWidget->clear();
+    m_loadedDocsData.clear();
 
-    for (QString & fileName : fileNames)
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select one or more files to open", QString(), kUploadFilters);
+
+    loadDocsRepo(fileNames);
+
+    for (DocInfo & info : m_loadedDocsData)
     {
-        QFile file(fileName);
-        QFileInfo info(file);
-
         QListWidgetItem * newItem = new QListWidgetItem;
-        newItem->setText(info.fileName());
+        newItem->setText(info.fileName);
         ui.listWidget->addItem(newItem);
     }
 
@@ -290,10 +364,9 @@ void DocTestTool::OnEditCancelButtonClicked()
 //========================================
 void DocTestTool::OnUploadOkButtonClicked()
 {
-    for (int i = 0, iEnd = ui.listWidget->count(); i < iEnd; ++i)
+    for (DocInfo & info : m_loadedDocsData)
     {
-        QListWidgetItem * widget = ui.listWidget->item(i);
-        QFile file(widget->text());
+        QFile file(info.filePath);
         QFileInfo fileInfo(file);
 
         QString folderPath(getDocsFilePath());
@@ -308,6 +381,12 @@ void DocTestTool::OnUploadOkButtonClicked()
             QFile infoFile(infoPath);
             const QString val = "{}";
             QJsonDocument jsonDoc = QJsonDocument::fromJson(val.toUtf8());
+            QJsonObject obj = jsonDoc.object();
+            obj[kComment] = info.comment;
+            obj[kFilename] = info.fileName;
+            obj[kTags] = QJsonArray::fromStringList(info.tags);
+            jsonDoc.setObject(obj);
+            
             QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
 
             if (infoFile.open(QIODevice::WriteOnly))
@@ -325,12 +404,16 @@ void DocTestTool::OnUploadOkButtonClicked()
 void DocTestTool::OnUploadAddButtonClicked()
 {
     // TODO check for duplicates
-    QFileDialog dialog(this);
-    dialog.setNameFilters(kUploadFilters);
-    QStringList fileNames = dialog.getOpenFileNames();
-    if (!fileNames.isEmpty())
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select one or more files to open", QString(), kUploadFilters);
+
+    loadDocsRepo(fileNames);
+
+    ui.listWidget->clear();
+    for (DocInfo & info : m_loadedDocsData)
     {
-        ui.listWidget->addItems(fileNames);
+        QListWidgetItem * newItem = new QListWidgetItem;
+        newItem->setText(info.fileName);
+        ui.listWidget->addItem(newItem);
     }
 }
 
@@ -351,6 +434,17 @@ void DocTestTool::OnUploadTagButtonClicked()
     {
         item->setTextColor("blue");
     }
+
+    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    for (QModelIndex & index : indexes)
+    {
+        const int i = index.row();
+        if (i < m_loadedDocsData.size())
+        {
+            DocInfo & info = m_loadedDocsData[i];
+            info.tags = ui.uploadTagsTextEdit->text().split(" ");
+        }
+    }
 }
 
 void DocTestTool::OnUploadCommentButtonClicked()
@@ -360,6 +454,17 @@ void DocTestTool::OnUploadCommentButtonClicked()
     {
         item->setTextColor("green");
     }
+
+    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    for (QModelIndex & index : indexes)
+    {
+        const int i = index.row();
+        if (i < m_loadedDocsData.size())
+        {
+            DocInfo & info = m_loadedDocsData[i];
+            info.comment = ui.uploadCommentsTextEdit->text();
+        }
+    }
 }
 
 void DocTestTool::OnUploadCancelButtonClicked()
@@ -367,6 +472,24 @@ void DocTestTool::OnUploadCancelButtonClicked()
     ui.listWidget->clear();
     viewUploadScreen(false);
     viewMainScreen(true);
+}
+
+void DocTestTool::OnListWidgetClicked(QListWidgetItem * item)
+{
+    if (ViewMode::Upload != m_viewMode) return;
+
+    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    if (1 == indexes.size())
+    {
+        QModelIndex index = indexes[0];
+        const int i = index.row();
+        if (i < m_loadedDocsData.size())
+        {
+            const DocInfo & info = m_loadedDocsData[i];
+            ui.uploadCommentsTextEdit->setText(info.comment);
+            ui.uploadTagsTextEdit->setText(info.tags.join(" "));
+        }
+    }
 }
 
 //========================================
@@ -389,12 +512,19 @@ void DocTestTool::onSearchBackButtonClicked()
 
 void DocTestTool::OnListWidgetDoubleClicked(QListWidgetItem * item)
 {
-    if (ViewMode::Search == m_viewMode)
+    if (ViewMode::Search != m_viewMode) return;
+
+    const QString key = item->text();
+    if (!key.isEmpty())
     {
-        const QString key = item->text();
-        if (!key.isEmpty())
+        auto it = m_templates.find(key);
+        if (it != m_templates.constEnd())
         {
-            ui.searchTextEdit->setText(m_templates[key].join(" "));
+            ui.searchTextEdit->setText(it.value().join(" "));
+        }
+        else
+        {
+            ui.searchTextEdit->setText(key);
         }
     }
 }

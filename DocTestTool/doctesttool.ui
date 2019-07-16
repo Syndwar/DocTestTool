@@ -310,6 +310,26 @@
      <string>Esc</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="uploadCommentsTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>80</y>
+      <width>241</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="uploadTagsTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>30</y>
+      <width>241</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>editTextWnd</zorder>
    <zorder>searchBtn</zorder>
    <zorder>uploadBtn</zorder>
@@ -326,6 +346,8 @@
    <zorder>searchTextEdit</zorder>
    <zorder>searchFindBtn</zorder>
    <zorder>searchCancelBtn</zorder>
+   <zorder>uploadCommentsTextEdit</zorder>
+   <zorder>uploadTagsTextEdit</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

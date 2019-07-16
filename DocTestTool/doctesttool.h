@@ -4,6 +4,8 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_doctesttool.h"
 
+struct DocInfo;
+
 class DocTestTool : public QMainWindow
 {
     Q_OBJECT
@@ -21,6 +23,8 @@ private:
     QStringList m_defaultTags;
     QMap<QString, QStringList> m_templates;
     int m_docsCount;
+    QList<DocInfo> m_loadedDocsData;
+    QList<DocInfo> m_folderDocsData;
 
 public:
     DocTestTool(QWidget *parent = 0);
@@ -33,6 +37,7 @@ public:
     void viewEditScreen(const bool value);
     void loadConfig();
     void loadFilesData();
+    void loadDocsRepo(QStringList & fileNames);
 public slots:
     void OnEditButtonClicked();
     void OnUploadButtonClicked();
@@ -47,6 +52,7 @@ public slots:
     void OnUploadAddButtonClicked();
     void onSearchFindButtonClicked();
     void onSearchBackButtonClicked();
+    void OnListWidgetClicked(QListWidgetItem * item);
     void OnListWidgetDoubleClicked(QListWidgetItem * item);
 
 private:
