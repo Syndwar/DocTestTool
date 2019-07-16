@@ -137,7 +137,7 @@
      <string>Save</string>
     </property>
     <property name="shortcut">
-     <string>Return</string>
+     <string>S</string>
     </property>
    </widget>
    <widget class="QPushButton" name="editCancelBtn">
@@ -268,6 +268,48 @@
      <string>A</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="searchTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>301</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="searchFindBtn">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>70</y>
+      <width>120</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Find</string>
+    </property>
+    <property name="shortcut">
+     <string>Return</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="searchCancelBtn">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>130</y>
+      <width>120</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Back</string>
+    </property>
+    <property name="shortcut">
+     <string>Esc</string>
+    </property>
+   </widget>
    <zorder>editTextWnd</zorder>
    <zorder>searchBtn</zorder>
    <zorder>uploadBtn</zorder>
@@ -281,6 +323,9 @@
    <zorder>uploadDeleteBtn</zorder>
    <zorder>listWidget</zorder>
    <zorder>uploadAddBtn</zorder>
+   <zorder>searchTextEdit</zorder>
+   <zorder>searchFindBtn</zorder>
+   <zorder>searchCancelBtn</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
