@@ -10,6 +10,7 @@ namespace
 const char * const kBaseFolder = "base";
 const char * const kDocsFolder = "docs";
 const char * const kDefaultTagsFile = "config.json";
+const char * const kInfoDocFile = "info.json";
 const QStringList kUploadFilters = { "Pdf files (*.pdf)", "XML files (*.xml)" ,"Image files (*.png *.xpm *.jpg)", "Text files (*.txt)", "Any files (*)" };
 }
 
@@ -294,8 +295,27 @@ void DocTestTool::OnUploadOkButtonClicked()
         QListWidgetItem * widget = ui.listWidget->item(i);
         QFile file(widget->text());
         QFileInfo fileInfo(file);
-        const QString filepath = QDir(kBaseFolder).filePath(fileInfo.fileName());
-        file.copy(filepath);
+
+        QString folderPath(getDocsFilePath());
+        folderPath.append("/").append(QString::number(++m_docsCount));
+        if (!QDir(folderPath).exists())
+        {
+            QDir().mkdir(folderPath);
+            const QString filepath = QDir(folderPath).filePath(fileInfo.fileName());
+            file.copy(filepath);
+
+            const QString infoPath = QDir(folderPath).filePath(kInfoDocFile);
+            QFile infoFile(infoPath);
+            const QString val = "{}";
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(val.toUtf8());
+            QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
+
+            if (infoFile.open(QIODevice::WriteOnly))
+            {
+                infoFile.write(json);
+                infoFile.close();
+            }
+        }
     }
     ui.listWidget->clear();
     viewUploadScreen(false);
