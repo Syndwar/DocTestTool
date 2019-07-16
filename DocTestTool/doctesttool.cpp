@@ -322,10 +322,6 @@ void DocTestTool::OnUploadOkButtonClicked()
     viewMainScreen(true);
 }
 
-void DocTestTool::OnUploadCommentButtonClicked()
-{
-}
-
 void DocTestTool::OnUploadAddButtonClicked()
 {
     // TODO check for duplicates
@@ -340,7 +336,7 @@ void DocTestTool::OnUploadAddButtonClicked()
 
 void DocTestTool::OnUploadDeleteButtonClicked()
 {
-    QList<QListWidgetItem*> selectedWidgets = ui.listWidget->selectedItems();
+    QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
     for (QListWidgetItem * item : selectedWidgets)
     {
         ui.listWidget->removeItemWidget(item);
@@ -350,6 +346,20 @@ void DocTestTool::OnUploadDeleteButtonClicked()
 
 void DocTestTool::OnUploadTagButtonClicked()
 {
+    QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
+    for (QListWidgetItem * item : selectedWidgets)
+    {
+        item->setTextColor("blue");
+    }
+}
+
+void DocTestTool::OnUploadCommentButtonClicked()
+{
+    QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
+    for (QListWidgetItem * item : selectedWidgets)
+    {
+        item->setTextColor("green");
+    }
 }
 
 void DocTestTool::OnUploadCancelButtonClicked()

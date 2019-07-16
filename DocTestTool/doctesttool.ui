@@ -246,7 +246,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>D</string>
+     <string>-</string>
     </property>
     <property name="shortcut">
      <string>Del</string>
@@ -262,7 +262,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>A</string>
+     <string>+</string>
     </property>
     <property name="shortcut">
      <string>A</string>
