@@ -7,6 +7,7 @@
 #include "quazip.h"
 #include "quazipfile.h"
 #include "quazipnewinfo.h"
+#include <algorithm>
 
 namespace
 {
@@ -68,8 +69,9 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.uploadCommentBtn, SIGNAL(clicked()), this, SLOT(OnUploadCommentButtonClicked()));
     QObject::connect(ui.uploadAddBtn, SIGNAL(clicked()), this, SLOT(OnUploadAddButtonClicked()));
 
-    QObject::connect(ui.findTagBtn, SIGNAL(clicked()), this, SLOT(onSearchFindButtonClicked()));
-    QObject::connect(ui.searchDownloadBtn, SIGNAL(clicked()), this, SLOT(onSearchDownloadButtonClicked()));
+    QObject::connect(ui.findTagBtn, SIGNAL(clicked()), this, SLOT(OnFindTagButtonClicked()));
+    QObject::connect(ui.findCommentBtn, SIGNAL(clicked()), this, SLOT(onFindCommentButtonClicked()));
+    QObject::connect(ui.searchDownloadBtn, SIGNAL(clicked()), this, SLOT(onDownloadButtonClicked()));
     QObject::connect(ui.clearTagBtn, SIGNAL(clicked()), this, SLOT(onClearTagButtonClicked()));
     QObject::connect(ui.clearCommentBtn, SIGNAL(clicked()), this, SLOT(onClearCommentButtonClicked()));
 
@@ -251,6 +253,8 @@ void DocTestTool::viewSearchScreen(const bool value)
 {
     if (value) m_viewMode = ViewMode::Search;
 
+    m_foundDocsData.clear();
+
     updateTagsListWidget();
     ui.listWidget->clear();
     ui.uploadTagsTextEdit->clear();
@@ -267,6 +271,7 @@ void DocTestTool::viewSearchScreen(const bool value)
     ui.clearCommentBtn->setVisible(value);
     ui.fullMatchBox->setVisible(value);
     ui.uploadDeleteBtn->setVisible(value);
+    ui.singleFolderCheckBox->setVisible(value);
 }
 
 void DocTestTool::viewUploadScreen(const bool value)
@@ -490,12 +495,29 @@ void DocTestTool::OnUploadAddButtonClicked()
 
 void DocTestTool::OnUploadDeleteButtonClicked()
 {
+    // get rows
     QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    QList<int> indexList;
     for (QModelIndex & index : indexes)
     {
-        const int i = index.row();
-        m_loadedDocsData.removeAt(i);
+        indexList.append(index.row());
     }
+    // sort in reverse order
+    std::sort(indexList.begin(), indexList.end());
+    std::reverse(indexList.begin(), indexList.end());
+
+    for (int i : indexList)
+    {
+        if (m_viewMode == ViewMode::Upload)
+        {
+            m_loadedDocsData.removeAt(i);
+        }
+        else if (m_viewMode == ViewMode::Search)
+        {
+            m_foundDocsData.removeAt(i);
+        }
+    }
+
     QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
     for (QListWidgetItem * item : selectedWidgets)
     {
@@ -555,16 +577,25 @@ void DocTestTool::OnUploadCancelButtonClicked()
 
 void DocTestTool::OnListWidgetClicked(QListWidgetItem * item)
 {
-    if (ViewMode::Upload != m_viewMode) return;
-
     QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
-    if (1 == indexes.size())
+    if (indexes.size() > 1) return;
+
+    const int i = indexes[0].row();
+
+    if (ViewMode::Upload == m_viewMode)
     {
-        QModelIndex index = indexes[0];
-        const int i = index.row();
         if (i < m_loadedDocsData.size())
         {
             const DocInfo & info = m_loadedDocsData[i];
+            ui.uploadCommentsTextEdit->setText(info.comment);
+            ui.uploadTagsTextEdit->setText(info.tags.join(kDelimiter));
+        }
+    }
+    else if (ViewMode::Search == m_viewMode)
+    {
+        if (i < m_foundDocsData.size())
+        {
+            const DocInfo & info = m_foundDocsData[i];
             ui.uploadCommentsTextEdit->setText(info.comment);
             ui.uploadTagsTextEdit->setText(info.tags.join(kDelimiter));
         }
@@ -584,14 +615,19 @@ void DocTestTool::onClearTagButtonClicked()
     ui.uploadTagsTextEdit->clear();
 }
 
-void DocTestTool::onSearchDownloadButtonClicked()
+void DocTestTool::onDownloadButtonClicked()
 {
     if (m_foundDocsData.size() == 0) return;
 
-    char c;
-    const QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "documents.zip");
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), tr("documents.zip"), tr("Zip *.zip"));
     if (!fileName.isEmpty())
     {
+        QString delimiter = ui.singleFolderCheckBox->isChecked() ? "-" : "/";
+        char c;
+        if (!fileName.endsWith(".zip"))
+        {
+            fileName.append(".zip");
+        }
         QuaZip zip(fileName);
         if (zip.open(QuaZip::mdCreate))
         {
@@ -601,7 +637,7 @@ void DocTestTool::onSearchDownloadButtonClicked()
                 QFile inFile(info.filePath);
                 if (inFile.open(QIODevice::ReadOnly))
                 {
-                    QString zipPath = QString::number(++i).append("/").append(info.fileName);
+                    const QString zipPath = QString::number(++i).append(delimiter).append(info.fileName);
                     QuaZipNewInfo zipInfo(zipPath, info.filePath);
                     QuaZipFile zipFile(&zip);
                     if (zipFile.open(QIODevice::WriteOnly, zipInfo))
@@ -646,7 +682,11 @@ void DocTestTool::OnTagsListDoubleClicked(QListWidgetItem * item)
     }
 }
 
-void DocTestTool::onSearchFindButtonClicked()
+void DocTestTool::onFindCommentButtonClicked()
+{
+}
+
+void DocTestTool::OnFindTagButtonClicked()
 {
     ui.listWidget->clear();
     m_foundDocsData.clear();

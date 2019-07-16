@@ -431,6 +431,22 @@
      <string>C</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="singleFolderCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>10</y>
+      <width>91</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Single Folder</string>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
    <zorder>uploadAddBtn</zorder>
    <zorder>editTextWnd</zorder>
    <zorder>tagsListWidget</zorder>
@@ -454,6 +470,7 @@
    <zorder>findCommentBtn</zorder>
    <zorder>uploadTagBtn</zorder>
    <zorder>uploadCommentBtn</zorder>
+   <zorder>singleFolderCheckBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

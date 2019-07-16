@@ -55,10 +55,11 @@ public slots:
     void OnUploadDeleteButtonClicked();
     void OnUploadCommentButtonClicked();
     void OnUploadAddButtonClicked();
-    void onSearchDownloadButtonClicked();
+    void onDownloadButtonClicked();
     void onClearCommentButtonClicked();
     void onClearTagButtonClicked();
-    void onSearchFindButtonClicked();
+    void onFindCommentButtonClicked();
+    void OnFindTagButtonClicked();
     void onSearchBackButtonClicked();
     void OnTagsListDoubleClicked(QListWidgetItem * item);
     void OnListWidgetClicked(QListWidgetItem * item);
