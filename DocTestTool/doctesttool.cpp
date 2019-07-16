@@ -542,7 +542,14 @@ void DocTestTool::OnUploadTagButtonClicked()
         if (i < m_loadedDocsData.size())
         {
             DocInfo & info = m_loadedDocsData[i];
-            info.tags = text.split(kDelimiter);
+            if (text.isEmpty())
+            {
+                info.tags.clear();
+            }
+            else
+            {
+                info.tags = text.split(kDelimiter);
+            }
         }
     }
 }
