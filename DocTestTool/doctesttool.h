@@ -25,6 +25,7 @@ private:
     int m_docsCount;
     QList<DocInfo> m_loadedDocsData;
     QList<DocInfo> m_folderDocsData;
+    QList<DocInfo> m_foundDocsData;
 
 public:
     DocTestTool(QWidget *parent = 0);
@@ -50,8 +51,10 @@ public slots:
     void OnUploadDeleteButtonClicked();
     void OnUploadCommentButtonClicked();
     void OnUploadAddButtonClicked();
+    void onSearchDownloadButtonClicked();
     void onSearchFindButtonClicked();
     void onSearchBackButtonClicked();
+    void OnTagsListDoubleClicked(QListWidgetItem * item);
     void OnListWidgetClicked(QListWidgetItem * item);
     void OnListWidgetDoubleClicked(QListWidgetItem * item);
 

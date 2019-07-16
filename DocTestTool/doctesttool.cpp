@@ -65,7 +65,9 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.uploadAddBtn, SIGNAL(clicked()), this, SLOT(OnUploadAddButtonClicked()));
 
     QObject::connect(ui.searchFindBtn, SIGNAL(clicked()), this, SLOT(onSearchFindButtonClicked()));
+    QObject::connect(ui.searchDownloadBtn, SIGNAL(clicked()), this, SLOT(onSearchDownloadButtonClicked()));
 
+    QObject::connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnTagsListDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(OnListWidgetClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnListWidgetDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.searchCancelBtn, SIGNAL(clicked()), this, SLOT(onSearchBackButtonClicked()));
@@ -87,7 +89,7 @@ DocTestTool::DocTestTool(QWidget * parent)
     QFile tagsFile(getConfigFilePath());
     if (!tagsFile.exists())
     {
-        const QString val = "{\"tags\":[], \"comment\":\"\"}";
+        const QString val = "{\"tags\":[], \"templates\":{}}";
         QJsonDocument jsonDoc = QJsonDocument::fromJson(val.toUtf8());
         QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
 
@@ -184,6 +186,8 @@ void DocTestTool::loadFilesData()
                     docInfo.fileName = fileValue.toString();
                 }
 
+                docInfo.filePath = QDir(path).absoluteFilePath(docInfo.fileName);
+
                 m_folderDocsData.append(docInfo);
             }
             infoFile.close();
@@ -230,13 +234,13 @@ void DocTestTool::viewSearchScreen(const bool value)
 
     for (QString & tag : m_defaultTags)
     {
-        ui.listWidget->addItem(tag);
+        ui.tagsListWidget->addItem(tag);
     }
 
     auto it = m_templates.constBegin();
     while (it != m_templates.constEnd())
     {
-        ui.listWidget->addItem(it.key());
+        ui.tagsListWidget->addItem(it.key());
         ++it;
     }
 
@@ -245,6 +249,8 @@ void DocTestTool::viewSearchScreen(const bool value)
     ui.searchTextEdit->setVisible(value);
     ui.listWidget->setVisible(value);
     ui.searchCancelBtn->setVisible(value);
+    ui.searchDownloadBtn->setVisible(value);
+    ui.tagsListWidget->setVisible(value);
 }
 
 void DocTestTool::viewUploadScreen(const bool value)
@@ -501,22 +507,12 @@ void DocTestTool::OnListWidgetClicked(QListWidgetItem * item)
 //========================================
 // Search screen
 //========================================
-void DocTestTool::onSearchFindButtonClicked()
+void DocTestTool::onSearchDownloadButtonClicked()
 {
-    const QString findText = ui.searchTextEdit->text();
-    if (!findText.isEmpty())
-    {
-        ui.searchTextEdit->clear();
-    }
+
 }
 
-void DocTestTool::onSearchBackButtonClicked()
-{
-    viewSearchScreen(false);
-    viewMainScreen(true);
-}
-
-void DocTestTool::OnListWidgetDoubleClicked(QListWidgetItem * item)
+void DocTestTool::OnTagsListDoubleClicked(QListWidgetItem * item)
 {
     if (ViewMode::Search != m_viewMode) return;
 
@@ -533,4 +529,40 @@ void DocTestTool::OnListWidgetDoubleClicked(QListWidgetItem * item)
             ui.searchTextEdit->setText(key);
         }
     }
+}
+
+void DocTestTool::onSearchFindButtonClicked()
+{
+    m_foundDocsData.clear();
+
+    const QString findText = ui.searchTextEdit->text();
+    if (!findText.isEmpty())
+    {
+        const QString editText = ui.searchTextEdit->text();
+        ui.searchTextEdit->clear();
+
+        const QStringList searchTags = editText.split(" ");
+
+        for (DocInfo & info : m_loadedDocsData)
+        {
+            for (const QString & tag : searchTags)
+            {
+                if (info.tags.contains(tag))
+                {
+                    m_foundDocsData.append(info);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void DocTestTool::onSearchBackButtonClicked()
+{
+    viewSearchScreen(false);
+    viewMainScreen(true);
+}
+
+void DocTestTool::OnListWidgetDoubleClicked(QListWidgetItem * item)
+{
 }

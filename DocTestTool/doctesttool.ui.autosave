@@ -220,17 +220,17 @@
      <string>T</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="uploadCommentBtn">
+   <widget class="QPushButton" name="searchClearBtn">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>80</y>
+      <x>20</x>
+      <y>70</y>
       <width>41</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>C</string>
+     <string>X</string>
     </property>
     <property name="shortcut">
      <string>C</string>
@@ -359,6 +359,8 @@
      <string>Download</string>
     </property>
    </widget>
+   <zorder>uploadCommentsTextEdit</zorder>
+   <zorder>uploadTagsTextEdit</zorder>
    <zorder>editTextWnd</zorder>
    <zorder>searchBtn</zorder>
    <zorder>uploadBtn</zorder>
@@ -368,15 +370,13 @@
    <zorder>uploadCancelBtn</zorder>
    <zorder>uploadOkBtn</zorder>
    <zorder>uploadTagBtn</zorder>
-   <zorder>uploadCommentBtn</zorder>
+   <zorder>searchClearBtn</zorder>
    <zorder>uploadDeleteBtn</zorder>
    <zorder>listWidget</zorder>
    <zorder>uploadAddBtn</zorder>
    <zorder>searchTextEdit</zorder>
    <zorder>searchFindBtn</zorder>
    <zorder>searchCancelBtn</zorder>
-   <zorder>uploadCommentsTextEdit</zorder>
-   <zorder>uploadTagsTextEdit</zorder>
    <zorder>tagsListWidget</zorder>
    <zorder>searchDownloadBtn</zorder>
   </widget>
