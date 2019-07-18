@@ -33,6 +33,39 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="google-drive-qt">
+      <UniqueIdentifier>{5be87172-9e87-47ea-a5f4-891badcdaffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\core">
+      <UniqueIdentifier>{b278a9d0-aa32-4dd1-95f0-9c370b816acb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\gui">
+      <UniqueIdentifier>{a56d3323-1c92-42bd-9e57-ecbd52c122e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\gui\controls">
+      <UniqueIdentifier>{cb6921fb-9af4-49be-bdae-45dcb22a0307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\gui\forms">
+      <UniqueIdentifier>{a6067322-0b52-4fe4-a28b-b85fb4254de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\network">
+      <UniqueIdentifier>{b314d65b-bc17-4168-ac14-61143c5f458f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\network\operations">
+      <UniqueIdentifier>{0d3a86c8-8001-4d09-beca-2d63f54fe643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\parsers">
+      <UniqueIdentifier>{e8205ae3-8408-4dc6-9b8c-98eb2abd7a2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\res">
+      <UniqueIdentifier>{c5976edf-a18c-4d94-93a6-48187909073c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\settings">
+      <UniqueIdentifier>{4c002482-c3cd-4a30-bfb6-b2c9bb942c2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="google-drive-qt\share">
+      <UniqueIdentifier>{ee4dfb82-bdd9-4230-8c3a-f0da01b4c8a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -50,6 +83,321 @@
     <ClCompile Include="GeneratedFiles\qrc_doctesttool.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="google-drive-qt\core\driveengine.cpp">
+      <Filter>google-drive-qt\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_driveengine.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_driveengine.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\accountsmanager.cpp">
+      <Filter>google-drive-qt\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\checkui.cpp">
+      <Filter>google-drive-qt\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_checkui.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_checkui.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\contentui.cpp">
+      <Filter>google-drive-qt\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_contentui.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_contentui.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\filestransferui.cpp">
+      <Filter>google-drive-qt\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_filestransferui.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_filestransferui.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\items.cpp">
+      <Filter>google-drive-qt\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\controls\combobox.cpp">
+      <Filter>google-drive-qt\gui\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\controls\spacer.cpp">
+      <Filter>google-drive-qt\gui\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_spacer.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_spacer.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\controls\toolbar.cpp">
+      <Filter>google-drive-qt\gui\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_toolbar.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_toolbar.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\forms\authdialog.cpp">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_authdialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_authdialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\forms\createfolderdialog.cpp">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_createfolderdialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_createfolderdialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\forms\filepanel.cpp">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_filepanel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_filepanel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\forms\mainwindow.cpp">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_mainwindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_mainwindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\forms\progressbardialog.cpp">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_progressbardialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_progressbardialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\forms\settingsdialog.cpp">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_settingsdialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_settingsdialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\gui\forms\sharedialog.cpp">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_sharedialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_sharedialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\auth.cpp">
+      <Filter>google-drive-qt\network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_auth.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_auth.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\contentmanager.cpp">
+      <Filter>google-drive-qt\network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_contentmanager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_contentmanager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\downloadmanager.cpp">
+      <Filter>google-drive-qt\network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_downloadmanager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_downloadmanager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\networkmanager.cpp">
+      <Filter>google-drive-qt\network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_networkmanager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_networkmanager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\queries.cpp">
+      <Filter>google-drive-qt\network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_queries.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_queries.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\resmanager.cpp">
+      <Filter>google-drive-qt\network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_resmanager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_resmanager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\uploadmanager.cpp">
+      <Filter>google-drive-qt\network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_uploadmanager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_uploadmanager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\children.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_children.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_children.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\copy.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_copy.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_copy.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\create.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_create.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_create.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\delete.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_delete.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_delete.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\download.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_download.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_download.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\move.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_move.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_move.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\operation.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\operationsmanager.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_operationsmanager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_operationsmanager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\rename.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_rename.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_rename.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\share.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_share.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_share.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\network\operations\upload.cpp">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\parsers\jsonparser.cpp">
+      <Filter>google-drive-qt\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\parsers\xmlhandler.cpp">
+      <Filter>google-drive-qt\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_xmlhandler.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_xmlhandler.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\parsers\xmlparser.cpp">
+      <Filter>google-drive-qt\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\settings\accountinfo.cpp">
+      <Filter>google-drive-qt\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_accountinfo.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_accountinfo.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\settings\settingsmanager.cpp">
+      <Filter>google-drive-qt\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_settingsmanager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_settingsmanager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="google-drive-qt\share\commontools.cpp">
+      <Filter>google-drive-qt\share</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_resource.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="doctesttool.h">
@@ -61,10 +409,222 @@
     <CustomBuild Include="doctesttool.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="google-drive-qt\core\driveengine.h">
+      <Filter>google-drive-qt\core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\checkui.h">
+      <Filter>google-drive-qt\gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\contentui.h">
+      <Filter>google-drive-qt\gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\filestransferui.h">
+      <Filter>google-drive-qt\gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\controls\spacer.h">
+      <Filter>google-drive-qt\gui\controls</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\controls\toolbar.h">
+      <Filter>google-drive-qt\gui\controls</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\authdialog.h">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\authdialog.ui">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\createfolderdialog.h">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\createfolderdialog.ui">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\filepanel.h">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\filepanel.ui">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\mainwindow.h">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\mainwindow.ui">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\progressbardialog.h">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\progressbardialog.ui">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\settingsdialog.h">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\settingsdialog.ui">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\sharedialog.h">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\gui\forms\sharedialog.ui">
+      <Filter>google-drive-qt\gui\forms</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\auth.h">
+      <Filter>google-drive-qt\network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\contentmanager.h">
+      <Filter>google-drive-qt\network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\downloadmanager.h">
+      <Filter>google-drive-qt\network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\networkmanager.h">
+      <Filter>google-drive-qt\network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\queries.h">
+      <Filter>google-drive-qt\network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\resmanager.h">
+      <Filter>google-drive-qt\network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\uploadmanager.h">
+      <Filter>google-drive-qt\network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\operations\children.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\operations\copy.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\operations\create.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\operations\delete.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\operations\download.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\operations\move.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\operations\operationsmanager.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\operations\rename.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\network\operations\share.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\parsers\xmlhandler.h">
+      <Filter>google-drive-qt\parsers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\settings\accountinfo.h">
+      <Filter>google-drive-qt\settings</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\settings\settingsmanager.h">
+      <Filter>google-drive-qt\settings</Filter>
+    </CustomBuild>
+    <CustomBuild Include="google-drive-qt\resource.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_doctesttool.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="google-drive-qt\gui\accountsmanager.h">
+      <Filter>google-drive-qt\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\gui\items.h">
+      <Filter>google-drive-qt\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\gui\controls\combobox.h">
+      <Filter>google-drive-qt\gui\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_authdialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_createfolderdialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_filepanel.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_mainwindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_progressbardialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_settingsdialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_sharedialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\network\operations\operation.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\network\operations\upload.h">
+      <Filter>google-drive-qt\network\operations</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\parsers\jsonparser.h">
+      <Filter>google-drive-qt\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\parsers\xmlparser.h">
+      <Filter>google-drive-qt\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\share\commontools.h">
+      <Filter>google-drive-qt\share</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\share\debug.h">
+      <Filter>google-drive-qt\share</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\share\defs.h">
+      <Filter>google-drive-qt\share</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\share\enums.h">
+      <Filter>google-drive-qt\share</Filter>
+    </ClInclude>
+    <ClInclude Include="google-drive-qt\share\singleton.h">
+      <Filter>google-drive-qt\share</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="google-drive-qt\res\application-exit.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\application-vnd.oasis.opendocument.text.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\configure.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\down_arrow.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\drive-text-logo-flat.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\edit-delete.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\folder-blue.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\go-down.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\go-up.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\trash.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
+    <Image Include="google-drive-qt\res\user-identity.png">
+      <Filter>google-drive-qt\res</Filter>
+    </Image>
   </ItemGroup>
 </Project>

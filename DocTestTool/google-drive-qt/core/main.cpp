@@ -1,16 +1,5 @@
-/*#include "doctesttool.h"
-#include <QtWidgets/QApplication>
-
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    DocTestTool w;
-    w.show();
-    return a.exec();
-}
-*/
-#include <QtWidgets/QApplication>
-#include "google-drive-qt/gui/forms/mainwindow.h"
+#include <QtGui/QApplication>
+#include "gui/forms/mainwindow.h"
 #include <QDesktopWidget>
 
 int main(int argc, char *argv[])
