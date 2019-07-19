@@ -825,7 +825,7 @@ void DocTestTool::OnListWidgetDoubleClicked(QListWidgetItem * item)
         if (i < m_loadedDocsData.size())
         {
             DocInfo & info = m_loadedDocsData[i];
-            QDesktopServices::openUrl(info.filePath);
+            QDesktopServices::openUrl(QUrl(QString("file:///").append(info.filePath)));
             break;
         }
     }

@@ -72,6 +72,11 @@
       <height>60</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Search</string>
     </property>
@@ -88,6 +93,11 @@
       <height>60</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Upload</string>
     </property>
@@ -103,6 +113,11 @@
       <width>120</width>
       <height>60</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Edit Tags</string>
@@ -133,6 +148,11 @@
       <height>42</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Ok</string>
     </property>
@@ -148,6 +168,11 @@
       <width>42</width>
       <height>42</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Back</string>
@@ -165,6 +190,11 @@
       <height>421</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="defaultDropAction">
      <enum>Qt::MoveAction</enum>
     </property>
@@ -180,6 +210,11 @@
       <width>42</width>
       <height>42</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="autoFillBackground">
      <bool>true</bool>
@@ -200,6 +235,11 @@
       <height>42</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Ok</string>
     </property>
@@ -212,6 +252,11 @@
       <width>42</width>
       <height>42</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Set</string>
@@ -229,6 +274,11 @@
       <height>42</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
@@ -244,6 +294,11 @@
       <width>42</width>
       <height>42</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>-</string>
@@ -261,6 +316,11 @@
       <height>42</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>+</string>
     </property>
@@ -277,6 +337,11 @@
       <height>42</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Find</string>
     </property>
@@ -292,6 +357,11 @@
       <width>42</width>
       <height>42</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="autoFillBackground">
      <bool>true</bool>
@@ -312,6 +382,11 @@
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="placeholderText">
      <string>Enter comments here</string>
     </property>
@@ -324,6 +399,11 @@
       <width>241</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="whatsThis">
      <string/>
@@ -341,6 +421,11 @@
       <height>181</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="defaultDropAction">
      <enum>Qt::MoveAction</enum>
     </property>
@@ -357,6 +442,11 @@
       <height>42</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Save</string>
     </property>
@@ -369,9 +459,14 @@
      <rect>
       <x>60</x>
       <y>10</y>
-      <width>70</width>
+      <width>101</width>
       <height>17</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Full Match</string>
@@ -392,6 +487,11 @@
       <height>42</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Set</string>
     </property>
@@ -407,6 +507,11 @@
       <width>42</width>
       <height>42</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="autoFillBackground">
      <bool>false</bool>
@@ -424,6 +529,11 @@
       <height>42</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Find</string>
     </property>
@@ -431,29 +541,29 @@
      <string>C</string>
     </property>
    </widget>
-   <zorder>uploadAddBtn</zorder>
    <zorder>editTextWnd</zorder>
+   <zorder>uploadCommentBtn</zorder>
+   <zorder>uploadTagBtn</zorder>
+   <zorder>clearCommentBtn</zorder>
+   <zorder>clearTagBtn</zorder>
+   <zorder>searchCancelBtn</zorder>
+   <zorder>searchDownloadBtn</zorder>
+   <zorder>editCancelBtn</zorder>
+   <zorder>editSaveBtn</zorder>
+   <zorder>uploadCancelBtn</zorder>
+   <zorder>uploadOkBtn</zorder>
+   <zorder>searchBtn</zorder>
+   <zorder>uploadAddBtn</zorder>
    <zorder>tagsListWidget</zorder>
    <zorder>listWidget</zorder>
    <zorder>editBtn</zorder>
-   <zorder>searchBtn</zorder>
    <zorder>uploadBtn</zorder>
-   <zorder>searchDownloadBtn</zorder>
-   <zorder>searchCancelBtn</zorder>
    <zorder>uploadCommentsTextEdit</zorder>
    <zorder>uploadTagsTextEdit</zorder>
-   <zorder>editSaveBtn</zorder>
-   <zorder>editCancelBtn</zorder>
-   <zorder>uploadCancelBtn</zorder>
-   <zorder>uploadOkBtn</zorder>
-   <zorder>clearTagBtn</zorder>
    <zorder>uploadDeleteBtn</zorder>
    <zorder>findTagBtn</zorder>
    <zorder>fullMatchBox</zorder>
-   <zorder>clearCommentBtn</zorder>
    <zorder>findCommentBtn</zorder>
-   <zorder>uploadTagBtn</zorder>
-   <zorder>uploadCommentBtn</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
