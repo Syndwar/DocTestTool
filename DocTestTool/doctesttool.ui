@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>680</width>
-    <height>480</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>680</width>
-    <height>480</height>
+    <width>800</width>
+    <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>680</width>
-    <height>480</height>
+    <width>800</width>
+    <height>600</height>
    </size>
   </property>
   <property name="palette">
@@ -66,8 +66,8 @@
    <widget class="QPushButton" name="searchBtn">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>75</y>
+      <x>340</x>
+      <y>110</y>
       <width>120</width>
       <height>60</height>
      </rect>
@@ -87,8 +87,8 @@
    <widget class="QPushButton" name="uploadBtn">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>180</y>
+      <x>340</x>
+      <y>220</y>
       <width>120</width>
       <height>60</height>
      </rect>
@@ -108,8 +108,8 @@
    <widget class="QPushButton" name="editBtn">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>285</y>
+      <x>340</x>
+      <y>330</y>
       <width>120</width>
       <height>60</height>
      </rect>
@@ -134,16 +134,21 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>611</width>
-      <height>301</height>
+      <width>731</width>
+      <height>541</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
    </widget>
    <widget class="QPushButton" name="editSaveBtn">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>330</y>
+      <x>750</x>
+      <y>440</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -163,8 +168,8 @@
    <widget class="QPushButton" name="editCancelBtn">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>390</y>
+      <x>750</x>
+      <y>510</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -184,10 +189,10 @@
    <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>430</x>
       <y>10</y>
-      <width>251</width>
-      <height>421</height>
+      <width>311</width>
+      <height>541</height>
      </rect>
     </property>
     <property name="font">
@@ -205,8 +210,8 @@
    <widget class="QPushButton" name="uploadCancelBtn">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>390</y>
+      <x>750</x>
+      <y>510</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -229,8 +234,8 @@
    <widget class="QPushButton" name="uploadOkBtn">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>330</y>
+      <x>750</x>
+      <y>440</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -268,7 +273,7 @@
    <widget class="QPushButton" name="clearTagBtn">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>370</x>
       <y>30</y>
       <width>42</width>
       <height>42</height>
@@ -289,7 +294,7 @@
    <widget class="QPushButton" name="uploadDeleteBtn">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>750</x>
       <y>10</y>
       <width>42</width>
       <height>42</height>
@@ -310,7 +315,7 @@
    <widget class="QPushButton" name="uploadAddBtn">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>750</x>
       <y>60</y>
       <width>42</width>
       <height>42</height>
@@ -352,8 +357,8 @@
    <widget class="QPushButton" name="searchCancelBtn">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>390</y>
+      <x>750</x>
+      <y>510</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -378,7 +383,7 @@
      <rect>
       <x>60</x>
       <y>80</y>
-      <width>241</width>
+      <width>301</width>
       <height>41</height>
      </rect>
     </property>
@@ -396,7 +401,7 @@
      <rect>
       <x>60</x>
       <y>30</y>
-      <width>241</width>
+      <width>301</width>
       <height>41</height>
      </rect>
     </property>
@@ -418,7 +423,7 @@
       <x>10</x>
       <y>140</y>
       <width>351</width>
-      <height>181</height>
+      <height>411</height>
      </rect>
     </property>
     <property name="font">
@@ -436,8 +441,8 @@
    <widget class="QPushButton" name="searchDownloadBtn">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>330</y>
+      <x>750</x>
+      <y>440</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -502,7 +507,7 @@
    <widget class="QPushButton" name="clearCommentBtn">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>370</x>
       <y>80</y>
       <width>42</width>
       <height>42</height>
@@ -542,9 +547,10 @@
     </property>
    </widget>
    <zorder>editTextWnd</zorder>
+   <zorder>searchBtn</zorder>
+   <zorder>listWidget</zorder>
    <zorder>uploadCommentBtn</zorder>
    <zorder>uploadTagBtn</zorder>
-   <zorder>clearCommentBtn</zorder>
    <zorder>clearTagBtn</zorder>
    <zorder>searchCancelBtn</zorder>
    <zorder>searchDownloadBtn</zorder>
@@ -552,10 +558,8 @@
    <zorder>editSaveBtn</zorder>
    <zorder>uploadCancelBtn</zorder>
    <zorder>uploadOkBtn</zorder>
-   <zorder>searchBtn</zorder>
    <zorder>uploadAddBtn</zorder>
    <zorder>tagsListWidget</zorder>
-   <zorder>listWidget</zorder>
    <zorder>editBtn</zorder>
    <zorder>uploadBtn</zorder>
    <zorder>uploadCommentsTextEdit</zorder>
@@ -564,15 +568,21 @@
    <zorder>findTagBtn</zorder>
    <zorder>fullMatchBox</zorder>
    <zorder>findCommentBtn</zorder>
+   <zorder>clearCommentBtn</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>680</width>
-     <height>21</height>
+     <width>800</width>
+     <height>27</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
    </property>
    <widget class="QMenu" name="menuMenu">
     <property name="palette">
@@ -612,6 +622,11 @@
       </disabled>
      </palette>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
@@ -621,6 +636,11 @@
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuExport">
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Export</string>
     </property>
@@ -629,7 +649,13 @@
    <addaction name="menuMenu"/>
    <addaction name="menuExport"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+  </widget>
   <action name="actionSearch">
    <property name="text">
     <string>Search</string>
@@ -658,6 +684,11 @@
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionSingleFolder">
    <property name="checkable">
@@ -668,6 +699,11 @@
    </property>
    <property name="text">
     <string>Single Folder</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
    </property>
   </action>
  </widget>
