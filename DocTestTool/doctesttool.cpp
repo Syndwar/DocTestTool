@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QDesktopServices>
 #include "quazip.h"
 #include "quazipfile.h"
 #include "quazipnewinfo.h"
@@ -415,6 +416,13 @@ void DocTestTool::OnEditCancelButtonClicked()
 //========================================
 void DocTestTool::OnUploadOkButtonClicked()
 {
+    if (m_loadedDocsData.isEmpty())
+    {
+        ui.statusBar->setStyleSheet("color: red");
+        ui.statusBar->showMessage("Add documents!", 2000);
+        return;
+    }
+
     // check if all documents has tags
     int missingTagIndex = -1;
     for (int i = 0, iEnd = m_loadedDocsData.size(); i < iEnd; ++i)
@@ -624,7 +632,12 @@ void DocTestTool::onClearTagButtonClicked()
 
 void DocTestTool::onDownloadButtonClicked()
 {
-    if (m_foundDocsData.size() == 0) return;
+    if (m_foundDocsData.size() == 0)
+    {
+        ui.statusBar->setStyleSheet("color: red");
+        ui.statusBar->showMessage("No files to save!", 2000);
+        return;
+    }
 
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), tr("documents.zip"), tr("Zip *.zip"));
     if (!fileName.isEmpty())
@@ -770,4 +783,15 @@ void DocTestTool::onSearchBackButtonClicked()
 
 void DocTestTool::OnListWidgetDoubleClicked(QListWidgetItem * item)
 {
+    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    for (QModelIndex & index : indexes)
+    {
+        const int i = index.row();
+        if (i < m_loadedDocsData.size())
+        {
+            DocInfo & info = m_loadedDocsData[i];
+            QDesktopServices::openUrl(info.filePath);
+            break;
+        }
+    }
 }
