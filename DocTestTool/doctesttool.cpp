@@ -716,6 +716,31 @@ void DocTestTool::OnTagsListDoubleClicked(QListWidgetItem * item)
 
 void DocTestTool::onFindCommentButtonClicked()
 {
+    ui.listWidget->clear();
+    m_foundDocsData.clear();
+    
+    const QString findText = ui.uploadCommentsTextEdit->text();
+    if (!findText.isEmpty())
+    {
+        const QStringList searchTags = findText.split(kDelimiter);
+
+        for (DocInfo & info : m_folderDocsData)
+        {
+            for (const QString & tag : searchTags)
+            {
+                if (info.comment.contains(tag))
+                {
+                    m_foundDocsData.append(info);
+                    break;
+                }
+            }
+        }
+    }
+
+    for (DocInfo & info : m_foundDocsData)
+    {
+        ui.listWidget->addItem(info.fileName);
+    }
 }
 
 void DocTestTool::OnFindTagButtonClicked()
@@ -743,8 +768,7 @@ void DocTestTool::doGreedySearch()
     const QString findText = ui.uploadTagsTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QString editText = ui.uploadTagsTextEdit->text();
-        const QStringList searchTags = editText.split(kDelimiter);
+        const QStringList searchTags = findText.split(kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {
@@ -765,8 +789,7 @@ void DocTestTool::doStrictSearch()
     const QString findText = ui.uploadTagsTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QString editText = ui.uploadTagsTextEdit->text();
-        const QStringList searchTags = editText.split(kDelimiter);
+        const QStringList searchTags = findText.split(kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {
