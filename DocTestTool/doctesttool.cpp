@@ -225,13 +225,26 @@ void DocTestTool::loadDocsRepo(QStringList & fileNames)
 {
     for (QString & fileName : fileNames)
     {
-        QFile file(fileName);
-        QFileInfo info(file);
+        bool duplicate = false;
+        for (const DocInfo & info : m_loadedDocsData)
+        {
+            if (info.filePath == fileName)
+            {
+                duplicate = true;
+                break;
+            }
+        }
         
-        DocInfo docInfo;
-        docInfo.filePath = fileName;
-        docInfo.fileName = info.fileName();
-        m_loadedDocsData.append(docInfo);
+        if (!duplicate)
+        {
+            QFile file(fileName);
+            QFileInfo info(file);
+
+            DocInfo docInfo;
+            docInfo.filePath = fileName;
+            docInfo.fileName = info.fileName();
+            m_loadedDocsData.append(docInfo);
+        }
     }
 }
 
@@ -272,7 +285,6 @@ void DocTestTool::viewSearchScreen(const bool value)
     ui.clearCommentBtn->setVisible(value);
     ui.fullMatchBox->setVisible(value);
     ui.uploadDeleteBtn->setVisible(value);
-    ui.singleFolderCheckBox->setVisible(value);
 }
 
 void DocTestTool::viewUploadScreen(const bool value)
@@ -642,7 +654,7 @@ void DocTestTool::onDownloadButtonClicked()
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), tr("documents.zip"), tr("Zip *.zip"));
     if (!fileName.isEmpty())
     {
-        QString delimiter = ui.singleFolderCheckBox->isChecked() ? "-" : "/";
+        QString delimiter = ui.actionSingleFolder->isChecked() ? "-" : "/";
         char c;
         if (!fileName.endsWith(".zip"))
         {

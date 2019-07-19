@@ -431,22 +431,6 @@
      <string>C</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="singleFolderCheckBox">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>10</y>
-      <width>91</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Single Folder</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
    <zorder>uploadAddBtn</zorder>
    <zorder>editTextWnd</zorder>
    <zorder>tagsListWidget</zorder>
@@ -470,7 +454,6 @@
    <zorder>findCommentBtn</zorder>
    <zorder>uploadTagBtn</zorder>
    <zorder>uploadCommentBtn</zorder>
-   <zorder>singleFolderCheckBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -527,7 +510,14 @@
     </property>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuExport">
+    <property name="title">
+     <string>Export</string>
+    </property>
+    <addaction name="actionSingleFolder"/>
+   </widget>
    <addaction name="menuMenu"/>
+   <addaction name="menuExport"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSearch">
@@ -557,6 +547,17 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionSingleFolder">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Single Folder</string>
    </property>
   </action>
  </widget>
