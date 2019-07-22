@@ -105,9 +105,9 @@
    <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>660</x>
       <y>10</y>
-      <width>541</width>
+      <width>301</width>
       <height>641</height>
      </rect>
     </property>
@@ -145,7 +145,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>30</y>
+      <y>60</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -166,7 +166,7 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>30</y>
+      <y>60</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -229,7 +229,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>30</y>
+      <y>60</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -274,7 +274,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>80</y>
+      <y>110</y>
       <width>301</width>
       <height>41</height>
      </rect>
@@ -292,7 +292,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>30</y>
+      <y>60</y>
       <width>301</width>
       <height>41</height>
      </rect>
@@ -312,10 +312,10 @@
    <widget class="QListWidget" name="tagsListWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>140</y>
-      <width>351</width>
-      <height>511</height>
+      <x>60</x>
+      <y>160</y>
+      <width>301</width>
+      <height>491</height>
      </rect>
     </property>
     <property name="font">
@@ -355,9 +355,9 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>10</y>
+      <y>26</y>
       <width>101</width>
-      <height>17</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="font">
@@ -379,7 +379,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>80</y>
+      <y>110</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -400,7 +400,7 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>80</y>
+      <y>110</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -417,27 +417,6 @@
      <string>Clear</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="findCommentBtn">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>42</width>
-      <height>42</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Find</string>
-    </property>
-    <property name="shortcut">
-     <string>C</string>
-    </property>
-   </widget>
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
      <rect>
@@ -448,16 +427,16 @@
      </rect>
     </property>
     <property name="value">
-     <number>24</number>
+     <number>0</number>
     </property>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>10</y>
+      <y>70</y>
       <width>122</width>
-      <height>641</height>
+      <height>531</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -547,26 +526,56 @@
      </item>
     </layout>
    </widget>
+   <widget class="QComboBox" name="searchComboBox">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>20</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>Tags</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Comments</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Extension</string>
+     </property>
+    </item>
+   </widget>
+   <zorder>editTextWnd</zorder>
+   <zorder>findTagBtn</zorder>
+   <zorder>saveBtn</zorder>
    <zorder>editSaveBtn</zorder>
    <zorder>uploadOkBtn</zorder>
-   <zorder>editTextWnd</zorder>
    <zorder>listWidget</zorder>
    <zorder>uploadCommentBtn</zorder>
    <zorder>uploadTagBtn</zorder>
    <zorder>clearTagBtn</zorder>
    <zorder>backBtn</zorder>
-   <zorder>saveBtn</zorder>
    <zorder>uploadAddBtn</zorder>
    <zorder>tagsListWidget</zorder>
    <zorder>uploadCommentsTextEdit</zorder>
    <zorder>uploadTagsTextEdit</zorder>
    <zorder>uploadDeleteBtn</zorder>
-   <zorder>findTagBtn</zorder>
    <zorder>fullMatchBox</zorder>
-   <zorder>findCommentBtn</zorder>
    <zorder>clearCommentBtn</zorder>
    <zorder>progressBar</zorder>
    <zorder>verticalLayoutWidget</zorder>
+   <zorder>searchComboBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

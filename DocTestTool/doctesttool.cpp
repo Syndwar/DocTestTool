@@ -21,6 +21,9 @@ const char * const kFilename = "filename";
 const char * const kTags = "tags";
 const QString kUploadFilters = "Documents (*.pdf *.tiff);;Images (*.jpg *.jpeg *.png);;Data Only (*.txt *json *html);;XML (*.xml);;All files (*.*)";
 const char * const kDelimiter = ", ";
+const QString kTagsCombo = "Tags";
+const QString kCommentsCombo = "Comments";
+const QString kExtensionCombo = "Extension";
 }
 
 struct DocInfo
@@ -70,7 +73,6 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.uploadAddBtn, SIGNAL(clicked()), this, SLOT(OnUploadAddButtonClicked()));
 
     QObject::connect(ui.findTagBtn, SIGNAL(clicked()), this, SLOT(OnFindTagButtonClicked()));
-    QObject::connect(ui.findCommentBtn, SIGNAL(clicked()), this, SLOT(onFindCommentButtonClicked()));
     QObject::connect(ui.saveBtn, SIGNAL(clicked()), this, SLOT(OnSaveButtonClicked()));
     QObject::connect(ui.clearTagBtn, SIGNAL(clicked()), this, SLOT(onClearTagButtonClicked()));
     QObject::connect(ui.clearCommentBtn, SIGNAL(clicked()), this, SLOT(onClearCommentButtonClicked()));
@@ -206,9 +208,6 @@ void DocTestTool::loadFilesData()
             infoFile.close();
         }
     }
-
-
-
 }
 
 void DocTestTool::loadDocsRepo(QStringList & fileNames)
@@ -265,7 +264,6 @@ void DocTestTool::viewSearchScreen(const bool value)
     ui.uploadTagsTextEdit->clear();
     ui.uploadCommentsTextEdit->clear();
     ui.findTagBtn->setVisible(value);
-    ui.findCommentBtn->setVisible(value);
     ui.uploadTagsTextEdit->setVisible(value);
     ui.uploadCommentsTextEdit->setVisible(value);
     ui.listWidget->setVisible(value);
@@ -277,6 +275,7 @@ void DocTestTool::viewSearchScreen(const bool value)
     ui.uploadDeleteBtn->setVisible(value);
     ui.backBtn->setVisible(value);
     ui.progressBar->setVisible(false);
+    ui.searchComboBox->setVisible(value);
 }
 
 void DocTestTool::viewUploadScreen(const bool value)
@@ -632,6 +631,9 @@ void DocTestTool::OnListWidgetClicked(QListWidgetItem * item)
 void DocTestTool::onClearCommentButtonClicked()
 {
     ui.uploadCommentsTextEdit->clear();
+
+    QDialog dialog(this);
+    dialog.exec();
 }
 
 void DocTestTool::onClearTagButtonClicked()
@@ -718,36 +720,24 @@ void DocTestTool::OnTagsListDoubleClicked(QListWidgetItem * item)
     }
 }
 
-void DocTestTool::onFindCommentButtonClicked()
+void DocTestTool::OnFindTagButtonClicked()
 {
-    ui.listWidget->clear();
-    m_foundDocsData.clear();
-    
-    const QString findText = ui.uploadCommentsTextEdit->text();
-    if (!findText.isEmpty())
+    const QString currentText = ui.searchComboBox->currentText();
+    if (currentText == kTagsCombo)
     {
-        const QStringList searchTags = findText.split(kDelimiter);
-
-        for (DocInfo & info : m_folderDocsData)
-        {
-            for (const QString & tag : searchTags)
-            {
-                if (info.comment.contains(tag))
-                {
-                    m_foundDocsData.append(info);
-                    break;
-                }
-            }
-        }
+        findTags();
     }
-
-    for (DocInfo & info : m_foundDocsData)
+    else if (currentText == kCommentsCombo)
     {
-        ui.listWidget->addItem(info.fileName);
+        findComments();
+    }
+    else if (currentText == kExtensionCombo)
+    {
+        findExtensions();
     }
 }
 
-void DocTestTool::OnFindTagButtonClicked()
+void DocTestTool::findTags()
 {
     ui.listWidget->clear();
     m_foundDocsData.clear();
@@ -811,6 +801,64 @@ void DocTestTool::doStrictSearch()
                 m_foundDocsData.append(info);
             }
         }
+    }
+}
+
+void DocTestTool::findComments()
+{
+    ui.listWidget->clear();
+    m_foundDocsData.clear();
+
+    const QString findText = ui.uploadTagsTextEdit->text();
+    if (!findText.isEmpty())
+    {
+        const QStringList searchTags = findText.split(kDelimiter);
+
+        for (DocInfo & info : m_folderDocsData)
+        {
+            for (const QString & tag : searchTags)
+            {
+                if (info.comment.contains(tag))
+                {
+                    m_foundDocsData.append(info);
+                    break;
+                }
+            }
+        }
+    }
+
+    for (DocInfo & info : m_foundDocsData)
+    {
+        ui.listWidget->addItem(info.fileName);
+    }
+}
+
+void DocTestTool::findExtensions()
+{
+    ui.listWidget->clear();
+    m_foundDocsData.clear();
+
+    const QString findText = ui.uploadTagsTextEdit->text();
+    if (!findText.isEmpty())
+    {
+        const QStringList searchTags = findText.split(kDelimiter);
+
+        for (DocInfo & info : m_folderDocsData)
+        {
+            for (const QString & tag : searchTags)
+            {
+                if (info.fileName.endsWith(tag))
+                {
+                    m_foundDocsData.append(info);
+                    break;
+                }
+            }
+        }
+    }
+
+    for (DocInfo & info : m_foundDocsData)
+    {
+        ui.listWidget->addItem(info.fileName);
     }
 }
 

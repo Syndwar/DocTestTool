@@ -43,6 +43,9 @@ public:
     void doGreedySearch();
     void doStrictSearch();
     void updateTagsListWidget();
+    void findComments();
+    void findExtensions();
+    void findTags();
 public slots:
     void OnEditButtonClicked();
     void OnUploadButtonClicked();
@@ -57,7 +60,6 @@ public slots:
     void OnSaveButtonClicked();
     void onClearCommentButtonClicked();
     void onClearTagButtonClicked();
-    void onFindCommentButtonClicked();
     void OnFindTagButtonClicked();
     void OnTagsListDoubleClicked(QListWidgetItem * item);
     void OnListWidgetClicked(QListWidgetItem * item);
