@@ -59,10 +59,9 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.editBtn, SIGNAL(clicked()), this, SLOT(OnEditButtonClicked()));
     QObject::connect(ui.searchBtn, SIGNAL(clicked()), this, SLOT(OnSearchButtonClicked()));
 
-    QObject::connect(ui.editCancelBtn, SIGNAL(clicked()), this, SLOT(OnEditCancelButtonClicked()));
+    QObject::connect(ui.backBtn, SIGNAL(clicked()), this, SLOT(OnBackButtonClicked()));
     QObject::connect(ui.editSaveBtn, SIGNAL(clicked()), this, SLOT(OnEditSaveButtonClicked()));
     
-    QObject::connect(ui.uploadCancelBtn, SIGNAL(clicked()), this, SLOT(OnUploadCancelButtonClicked()));
     QObject::connect(ui.uploadOkBtn, SIGNAL(clicked()), this, SLOT(OnUploadOkButtonClicked()));
 
     QObject::connect(ui.uploadTagBtn, SIGNAL(clicked()), this, SLOT(OnUploadTagButtonClicked()));
@@ -72,14 +71,13 @@ DocTestTool::DocTestTool(QWidget * parent)
 
     QObject::connect(ui.findTagBtn, SIGNAL(clicked()), this, SLOT(OnFindTagButtonClicked()));
     QObject::connect(ui.findCommentBtn, SIGNAL(clicked()), this, SLOT(onFindCommentButtonClicked()));
-    QObject::connect(ui.searchDownloadBtn, SIGNAL(clicked()), this, SLOT(onDownloadButtonClicked()));
+    QObject::connect(ui.saveBtn, SIGNAL(clicked()), this, SLOT(OnSaveButtonClicked()));
     QObject::connect(ui.clearTagBtn, SIGNAL(clicked()), this, SLOT(onClearTagButtonClicked()));
     QObject::connect(ui.clearCommentBtn, SIGNAL(clicked()), this, SLOT(onClearCommentButtonClicked()));
 
     QObject::connect(ui.tagsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnTagsListDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(OnListWidgetClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnListWidgetDoubleClicked(QListWidgetItem *)));
-    QObject::connect(ui.searchCancelBtn, SIGNAL(clicked()), this, SLOT(onSearchBackButtonClicked()));
 
     ui.listWidget->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
 
@@ -117,14 +115,6 @@ DocTestTool::DocTestTool(QWidget * parent)
 
 void DocTestTool::tuneView()
 {
-    //ui.searchCancelBtn->setStyleSheet(QString("background-color: red"));
-    //ui.uploadCancelBtn->setStyleSheet(QString("background-color: red"));
-    //ui.editCancelBtn->setStyleSheet(QString("background-color: red"));
-    //ui.searchDownloadBtn->setStyleSheet(QString("background-color: green; color:white"));
-    //ui.editSaveBtn->setStyleSheet(QString("background-color: green; color:white"));
-    //ui.uploadOkBtn->setStyleSheet(QString("background-color: green; color:white"));
-    //ui.findTagBtn->setStyleSheet(QString("background-color: blue; color:white"));
-    //ui.findCommentBtn->setStyleSheet(QString("background-color: blue; color:white"));
 }
 
 void DocTestTool::loadConfig()
@@ -261,6 +251,7 @@ void DocTestTool::viewMainScreen(const bool value)
     ui.uploadBtn->setVisible(value);
     ui.editBtn->setVisible(value);
     ui.searchBtn->setVisible(value);
+    ui.progressBar->setVisible(false);
 }
 
 void DocTestTool::viewSearchScreen(const bool value)
@@ -278,13 +269,14 @@ void DocTestTool::viewSearchScreen(const bool value)
     ui.uploadTagsTextEdit->setVisible(value);
     ui.uploadCommentsTextEdit->setVisible(value);
     ui.listWidget->setVisible(value);
-    ui.searchCancelBtn->setVisible(value);
-    ui.searchDownloadBtn->setVisible(value);
+    ui.saveBtn->setVisible(value);
     ui.tagsListWidget->setVisible(value);
     ui.clearTagBtn->setVisible(value);
     ui.clearCommentBtn->setVisible(value);
     ui.fullMatchBox->setVisible(value);
     ui.uploadDeleteBtn->setVisible(value);
+    ui.backBtn->setVisible(value);
+    ui.progressBar->setVisible(false);
 }
 
 void DocTestTool::viewUploadScreen(const bool value)
@@ -295,7 +287,6 @@ void DocTestTool::viewUploadScreen(const bool value)
 
     ui.listWidget->setVisible(value);
     ui.uploadOkBtn->setVisible(value);
-    ui.uploadCancelBtn->setVisible(value);
     ui.uploadTagBtn->setVisible(value);
     ui.uploadCommentBtn->setVisible(value);
     ui.uploadDeleteBtn->setVisible(value);
@@ -305,6 +296,8 @@ void DocTestTool::viewUploadScreen(const bool value)
     ui.tagsListWidget->setVisible(value);
     ui.clearTagBtn->setVisible(value);
     ui.clearCommentBtn->setVisible(value);
+    ui.backBtn->setVisible(value);
+    ui.progressBar->setVisible(false);
 }
 
 void DocTestTool::updateTagsListWidget()
@@ -341,8 +334,19 @@ void DocTestTool::viewEditScreen(const bool value)
     }
 
     ui.editTextWnd->setVisible(value);
-    ui.editCancelBtn->setVisible(value);
     ui.editSaveBtn->setVisible(value);
+    ui.backBtn->setVisible(value);
+}
+
+void DocTestTool::OnBackButtonClicked()
+{
+    ui.statusBar->clearMessage();
+    ui.listWidget->clear();
+    ui.editTextWnd->clear();
+    viewEditScreen(false);
+    viewSearchScreen(false);
+    viewUploadScreen(false);
+    viewMainScreen(true);
 }
 
 //========================================
@@ -416,13 +420,6 @@ void DocTestTool::OnEditSaveButtonClicked()
     }
 }
 
-void DocTestTool::OnEditCancelButtonClicked()
-{
-    ui.statusBar->clearMessage();
-    ui.editTextWnd->clear();
-    viewMainScreen(true);
-    viewEditScreen(false);
-}
 //========================================
 // Upload screen
 //========================================
@@ -458,6 +455,9 @@ void DocTestTool::OnUploadOkButtonClicked()
         return;
     }
 
+    ui.progressBar->setVisible(true);
+    ui.progressBar->setValue(0);
+    ui.progressBar->setMaximum(m_loadedDocsData.size());
     for (DocInfo & info : m_loadedDocsData)
     {
         QFile file(info.filePath);
@@ -490,8 +490,12 @@ void DocTestTool::OnUploadOkButtonClicked()
                 infoFile.close();
             }
         }
+        ui.progressBar->setValue(ui.progressBar->value() + 1);
     }
     loadFilesData();
+    ui.progressBar->setValue(ui.progressBar->maximum());
+    ui.progressBar->setVisible(true);
+
     ui.listWidget->clear();
     viewUploadScreen(false);
     viewMainScreen(true);
@@ -595,13 +599,6 @@ void DocTestTool::OnUploadCommentButtonClicked()
     }
 }
 
-void DocTestTool::OnUploadCancelButtonClicked()
-{
-    ui.listWidget->clear();
-    viewUploadScreen(false);
-    viewMainScreen(true);
-}
-
 void DocTestTool::OnListWidgetClicked(QListWidgetItem * item)
 {
     QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
@@ -642,7 +639,7 @@ void DocTestTool::onClearTagButtonClicked()
     ui.uploadTagsTextEdit->clear();
 }
 
-void DocTestTool::onDownloadButtonClicked()
+void DocTestTool::OnSaveButtonClicked()
 {
     if (m_foundDocsData.size() == 0)
     {
@@ -654,6 +651,9 @@ void DocTestTool::onDownloadButtonClicked()
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), tr("documents.zip"), tr("Zip *.zip"));
     if (!fileName.isEmpty())
     {
+        ui.progressBar->setVisible(true);
+        ui.progressBar->setValue(0);
+
         QString delimiter = ui.actionSingleFolder->isChecked() ? "-" : "/";
         char c;
         if (!fileName.endsWith(".zip"))
@@ -664,6 +664,7 @@ void DocTestTool::onDownloadButtonClicked()
         if (zip.open(QuaZip::mdCreate))
         {
             int i = 0;
+            ui.progressBar->setMaximum(m_foundDocsData.size());
             for (DocInfo & info : m_foundDocsData)
             {
                 QFile inFile(info.filePath);
@@ -679,9 +680,12 @@ void DocTestTool::onDownloadButtonClicked()
                     }
                     inFile.close();
                 }
+                ui.progressBar->setValue(ui.progressBar->value() + 1);
             }
             zip.close();
         }
+        ui.progressBar->setValue(ui.progressBar->maximum());
+        ui.progressBar->setVisible(false);
     }
 }
 
@@ -808,12 +812,6 @@ void DocTestTool::doStrictSearch()
             }
         }
     }
-}
-
-void DocTestTool::onSearchBackButtonClicked()
-{
-    viewSearchScreen(false);
-    viewMainScreen(true);
 }
 
 void DocTestTool::OnListWidgetDoubleClicked(QListWidgetItem * item)
