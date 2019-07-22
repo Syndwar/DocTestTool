@@ -223,6 +223,9 @@ Items::Data ContentManager::getCurrentFileInfo(void)
 
     if(index < 0) index = 0;
 
+    if (normalizedItems.isEmpty())
+        return Items::Data();
+
     return  normalizedItems[index];
 }
 

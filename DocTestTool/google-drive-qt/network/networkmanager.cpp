@@ -115,7 +115,8 @@ void NetworkManager::slotPostFinished(QNetworkReply* reply)
 
 void NetworkManager::getRequest(const QString &url)
 {
-    init();
+    if (!networkManager)
+        init();
 
     request.setUrl(QUrl(url));
 
@@ -129,16 +130,21 @@ void NetworkManager::getRequest(const QString &url)
 
 void NetworkManager::postRequest(QUrl url)
 {
-    init();
+    if(!networkManager)
+        init();
 
-    QString applicationName("DocTestTool");
+    QString applicationName("doctesttool");
     request.setUrl(url);
     request.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(postData.length()).toLatin1());
-    request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
+//    request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
     request.setRawHeader("User-Agent", applicationName.toLatin1());
     request.setRawHeader("Cache-Control", "no-cache");
-    request.setRawHeader("Accept", "*/*");
+//    request.setRawHeader("Accept", "*/*");
     request.setRawHeader("Connection", "Keep-Alive");
+
+    QSslConfiguration sslConfiguration(QSslConfiguration::defaultConfiguration());
+    sslConfiguration.setProtocol(QSsl::AnyProtocol);
+    request.setSslConfiguration(sslConfiguration);
 
     reply = networkManager->post(request, postData.toLatin1());
 

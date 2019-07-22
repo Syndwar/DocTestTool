@@ -49,8 +49,6 @@ void AuthDialog::slotAuthResponse(const QString &accessToken, const QString &ref
 {
     if (!accessToken.isEmpty())
         emit signalTokens(accessToken, refreshToken);
-    else
-        emit signalAccessTokenRequired();
 
     QDialog::accept();
 }

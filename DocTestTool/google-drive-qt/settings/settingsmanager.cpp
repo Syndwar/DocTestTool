@@ -194,19 +194,21 @@ QString SettingsManager::scope(void)
 QString SettingsManager::clientId(void)
 {
     //return getValueFromGroup(COMMON_GROUP, CLIENT_ID_KEY).toString();
-    return "994590773880-kghmpmae21ngb6qog4tl6a3kh17e8o5j.apps.googleusercontent.com";
+    return "994590773880-pm8bj3qjjer9lhru2sj25hnm3ljjarg9.apps.googleusercontent.com";
 }
 
 QString SettingsManager::clientSecret(void)
 {
     //return getValueFromGroup(COMMON_GROUP, CLIENT_SECRET_KEY).toString();
-    return "edKs9COh - KYjIiQsMBxISB6Z";
+    return "gU8So830WTWOG5lpEkUZbvN_";
 }
 
 QString SettingsManager::redirectUri(void)
 {
     //return getValueFromGroup(COMMON_GROUP, REDIRECT_URI_KEY).toString();
-    return "https://drive.google.com/drive/folders/1QDr8V0DaM7qiOOAnDzW1Ap1XvettVR6q";
+    //return "https://drive.google.com/drive/folders/1QDr8V0DaM7qiOOAnDzW1Ap1XvettVR6q";
+    //return "urn:ietf:wg:oauth:2.0 : oob";
+    return "http://localhost";
 }
 
 bool SettingsManager::isAnyAccount(void)

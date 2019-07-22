@@ -100,5 +100,6 @@ void Auth::postFinishedActions(QNetworkReply* reply)
 
 void Auth::performRequest(void)
 {
+    request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
     postRequest(QUrl("https://accounts.google.com/o/oauth2/token"));
 }
