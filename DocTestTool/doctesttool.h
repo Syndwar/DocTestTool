@@ -26,6 +26,7 @@ private:
     QList<DocInfo> m_loadedDocsData;  // files that are loaded into application and are processed
     QList<DocInfo> m_folderDocsData; // files that are stored in the app folder
     QList<DocInfo> m_foundDocsData; // files that are found using search filter
+    QDialog * m_editDialog = Q_NULLPTR;
 
 public:
     DocTestTool(QWidget *parent = 0);
@@ -36,8 +37,8 @@ public:
     void viewUploadScreen(const bool value);
     void viewSearchScreen(const bool value);
     void viewEditScreen(const bool value);
-    void tuneView();
     void loadConfig();
+    void prepareFolders();
     void loadFilesData();
     void loadDocsRepo(QStringList & fileNames);
     void doGreedySearch();
@@ -64,6 +65,8 @@ public slots:
     void OnTagsListDoubleClicked(QListWidgetItem * item);
     void OnListWidgetClicked(QListWidgetItem * item);
     void OnListWidgetDoubleClicked(QListWidgetItem * item);
+    void onEditDataButtonClicked();
+    void onEditDialogOkClicked();
 
 private:
     Ui::DocTestToolClass ui;

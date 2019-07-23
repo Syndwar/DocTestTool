@@ -110,6 +110,15 @@
     <ClCompile Include="quazip\quazip\zip.c">
       <Filter>Source Files\quazip</Filter>
     </ClCompile>
+    <ClCompile Include="editdatadialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_editdatadialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_editdatadialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="doctesttool.h">
@@ -129,6 +138,12 @@
     </CustomBuild>
     <CustomBuild Include="quazip\quazip\quazipfile.h">
       <Filter>Source Files\quazip</Filter>
+    </CustomBuild>
+    <CustomBuild Include="editdatadialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="editdatadialog.ui">
+      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

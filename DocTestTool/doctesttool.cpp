@@ -10,6 +10,8 @@
 #include "quazipnewinfo.h"
 #include <algorithm>
 
+#include "editdatadialog.h"
+
 namespace
 {
 const char * const kBaseFolder = "base";
@@ -77,13 +79,26 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.clearTagBtn, SIGNAL(clicked()), this, SLOT(onClearTagButtonClicked()));
     QObject::connect(ui.clearCommentBtn, SIGNAL(clicked()), this, SLOT(onClearCommentButtonClicked()));
 
+    QObject::connect(ui.editDataBtn, SIGNAL(clicked()), this, SLOT(onEditDataButtonClicked()));
+
+
     QObject::connect(ui.tagsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnTagsListDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(OnListWidgetClicked(QListWidgetItem *)));
     QObject::connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(OnListWidgetDoubleClicked(QListWidgetItem *)));
 
     ui.listWidget->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
 
+    m_editDialog = new EditDataDialog(this);
+    QObject::connect(m_editDialog, SIGNAL(okButtonClicked()), this, SLOT(onEditDialogOkClicked()));
+
     // create base folder
+    prepareFolders();
+    loadConfig();
+    loadFilesData();
+}
+
+void DocTestTool::prepareFolders()
+{
     if (!QDir(kBaseFolder).exists())
     {
         QDir().mkdir(kBaseFolder);
@@ -108,15 +123,6 @@ DocTestTool::DocTestTool(QWidget * parent)
             tagsFile.close();
         }
     }
-
-    loadConfig();
-    loadFilesData();
-
-    tuneView();
-}
-
-void DocTestTool::tuneView()
-{
 }
 
 void DocTestTool::loadConfig()
@@ -241,6 +247,10 @@ DocTestTool::~DocTestTool()
 {
 }
 
+void DocTestTool::onEditDialogOkClicked()
+{
+}
+
 //========================================
 // Screen selection
 //========================================
@@ -276,6 +286,7 @@ void DocTestTool::viewSearchScreen(const bool value)
     ui.backBtn->setVisible(value);
     ui.progressBar->setVisible(false);
     ui.searchComboBox->setVisible(value);
+    ui.editDataBtn->setVisible(value);
 }
 
 void DocTestTool::viewUploadScreen(const bool value)
@@ -416,6 +427,14 @@ void DocTestTool::OnEditSaveButtonClicked()
     {
         ui.statusBar->setStyleSheet("color: red");
         ui.statusBar->showMessage("Json is invalid!", 2000);
+    }
+}
+
+void DocTestTool::onEditDataButtonClicked()
+{
+    if (m_editDialog)
+    {
+        m_editDialog->exec();
     }
 }
 
@@ -631,9 +650,6 @@ void DocTestTool::OnListWidgetClicked(QListWidgetItem * item)
 void DocTestTool::onClearCommentButtonClicked()
 {
     ui.uploadCommentsTextEdit->clear();
-
-    QDialog dialog(this);
-    dialog.exec();
 }
 
 void DocTestTool::onClearTagButtonClicked()
