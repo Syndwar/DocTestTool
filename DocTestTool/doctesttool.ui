@@ -141,7 +141,7 @@
      <string>Ok</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="uploadTagBtn">
+   <widget class="QPushButton" name="setTextBtn">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -165,8 +165,8 @@
    <widget class="QPushButton" name="clearTagBtn">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>60</y>
+      <x>10</x>
+      <y>110</y>
       <width>42</width>
       <height>42</height>
      </rect>
@@ -225,7 +225,7 @@
      <string>A</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="findTagBtn">
+   <widget class="QPushButton" name="findBtn">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -270,31 +270,13 @@
      <string>Esc</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="uploadCommentsTextEdit">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>110</y>
-      <width>301</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="placeholderText">
-     <string>Enter comments here</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="uploadTagsTextEdit">
     <property name="geometry">
      <rect>
       <x>60</x>
       <y>60</y>
       <width>301</width>
-      <height>41</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -306,7 +288,7 @@
      <string/>
     </property>
     <property name="placeholderText">
-     <string>Enter tags here</string>
+     <string>Enter text here</string>
     </property>
    </widget>
    <widget class="QListWidget" name="tagsListWidget">
@@ -354,10 +336,10 @@
    <widget class="QCheckBox" name="fullMatchBox">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>26</y>
+      <x>260</x>
+      <y>20</y>
       <width>101</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -373,48 +355,6 @@
     </property>
     <property name="checked">
      <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="uploadCommentBtn">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>110</y>
-      <width>42</width>
-      <height>42</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Set</string>
-    </property>
-    <property name="shortcut">
-     <string>C</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="clearCommentBtn">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>110</y>
-      <width>42</width>
-      <height>42</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="text">
-     <string>Clear</string>
     </property>
    </widget>
    <widget class="QProgressBar" name="progressBar">
@@ -525,13 +465,16 @@
       </widget>
      </item>
     </layout>
+    <zorder>uploadBtn</zorder>
+    <zorder>searchBtn</zorder>
+    <zorder>editBtn</zorder>
    </widget>
    <widget class="QComboBox" name="searchComboBox">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>60</x>
       <y>20</y>
-      <width>91</width>
+      <width>151</width>
       <height>31</height>
      </rect>
     </property>
@@ -556,26 +499,93 @@
      </property>
     </item>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>30</y>
+      <width>47</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Tags:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>270</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Comment:</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="tagsBrowser">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>61</y>
+      <width>261</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="commentBrowser">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>300</y>
+      <width>261</width>
+      <height>351</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+   </widget>
+   <zorder>setTextBtn</zorder>
    <zorder>editTextWnd</zorder>
-   <zorder>findTagBtn</zorder>
+   <zorder>findBtn</zorder>
    <zorder>saveBtn</zorder>
    <zorder>editSaveBtn</zorder>
    <zorder>uploadOkBtn</zorder>
    <zorder>listWidget</zorder>
-   <zorder>uploadCommentBtn</zorder>
-   <zorder>uploadTagBtn</zorder>
    <zorder>clearTagBtn</zorder>
    <zorder>backBtn</zorder>
    <zorder>uploadAddBtn</zorder>
    <zorder>tagsListWidget</zorder>
-   <zorder>uploadCommentsTextEdit</zorder>
    <zorder>uploadTagsTextEdit</zorder>
    <zorder>uploadDeleteBtn</zorder>
    <zorder>fullMatchBox</zorder>
-   <zorder>clearCommentBtn</zorder>
    <zorder>progressBar</zorder>
    <zorder>verticalLayoutWidget</zorder>
    <zorder>searchComboBox</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>tagsBrowser</zorder>
+   <zorder>commentBrowser</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

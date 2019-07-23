@@ -36,7 +36,7 @@ public:
     void viewUploadScreen(const bool value);
     void viewSearchScreen(const bool value);
     void viewEditScreen(const bool value);
-    void tuneView();
+    void prepareFolders();
     void loadConfig();
     void loadFilesData();
     void loadDocsRepo(QStringList & fileNames);
@@ -46,24 +46,24 @@ public:
     void findComments();
     void findExtensions();
     void findTags();
+    void setTags();
+    void setComment();
 public slots:
-    void OnEditButtonClicked();
-    void OnUploadButtonClicked();
-    void OnSearchButtonClicked();
-    void OnEditSaveButtonClicked();
-    void OnBackButtonClicked();
-    void OnUploadOkButtonClicked();
-    void OnUploadTagButtonClicked();
-    void OnUploadDeleteButtonClicked();
-    void OnUploadCommentButtonClicked();
-    void OnUploadAddButtonClicked();
-    void OnSaveButtonClicked();
-    void onClearCommentButtonClicked();
+    void onEditButtonClicked();
+    void onUploadButtonClicked();
+    void onSearchButtonClicked();
+    void onEditSaveButtonClicked();
+    void onBackButtonClicked();
+    void onUploadOkButtonClicked();
+    void onSetTextButtonClicked();
+    void onUploadDeleteButtonClicked();
+    void onUploadAddButtonClicked();
+    void onSaveButtonClicked();
     void onClearTagButtonClicked();
-    void OnFindTagButtonClicked();
-    void OnTagsListDoubleClicked(QListWidgetItem * item);
-    void OnListWidgetClicked(QListWidgetItem * item);
-    void OnListWidgetDoubleClicked(QListWidgetItem * item);
+    void onFindButtonClicked();
+    void onTagsListDoubleClicked(QListWidgetItem * item);
+    void onListWidgetClicked(QListWidgetItem * item);
+    void onListWidgetDoubleClicked(QListWidgetItem * item);
 
 private:
     Ui::DocTestToolClass ui;
