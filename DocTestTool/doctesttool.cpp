@@ -23,7 +23,7 @@ const QString kUploadFilters = "Documents (*.pdf *.tiff);;Images (*.jpg *.jpeg *
 const char * const kDelimiter = ", ";
 const QString kTagsCombo = "Tags";
 const QString kCommentsCombo = "Comments";
-const QString kExtensionCombo = "Extension";
+const QString kName = "Name";
 }
 
 struct DocInfo
@@ -469,7 +469,7 @@ void DocTestTool::onUploadOkButtonClicked()
         if (!QDir(folderPath).exists())
         {
             QDir().mkdir(folderPath);
-            const QString filepath = QDir(folderPath).filePath(fileInfo.fileName());
+            const QString filepath = QDir(folderPath).filePath(info.fileName);
             file.copy(filepath);
 
             const QString infoPath = QDir(folderPath).filePath(kInfoDocFile);
@@ -561,9 +561,10 @@ void DocTestTool::onSetTextButtonClicked()
     {
         setComment();
     }
-    //else if (currentText == kExtensionCombo)
-    //{
-    //}
+    else if (currentText == kName)
+    {
+        setName();
+    }
 }
 
 void DocTestTool::setTags()
@@ -611,6 +612,27 @@ void DocTestTool::setComment()
         {
             DocInfo & info = m_loadedDocsData[i];
             info.comment = text;
+        }
+    }
+}
+
+void DocTestTool::setName()
+{
+    const QString text = ui.uploadTagsTextEdit->text();
+    QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
+    for (QListWidgetItem * item : selectedWidgets)
+    {
+        item->setText(text);
+    }
+
+    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    for (QModelIndex & index : indexes)
+    {
+        const int i = index.row();
+        if (i < m_loadedDocsData.size())
+        {
+            DocInfo & info = m_loadedDocsData[i];
+            info.fileName = text;
         }
     }
 }
@@ -740,9 +762,9 @@ void DocTestTool::onFindButtonClicked()
     {
         findComments();
     }
-    else if (currentText == kExtensionCombo)
+    else if (currentText == kName)
     {
-        findExtensions();
+        findName();
     }
 }
 
@@ -842,7 +864,7 @@ void DocTestTool::findComments()
     }
 }
 
-void DocTestTool::findExtensions()
+void DocTestTool::findName()
 {
     ui.listWidget->clear();
     m_foundDocsData.clear();
@@ -856,7 +878,7 @@ void DocTestTool::findExtensions()
         {
             for (const QString & tag : searchTags)
             {
-                if (info.fileName.endsWith(tag))
+                if (info.fileName.contains(tag))
                 {
                     m_foundDocsData.append(info);
                     break;

@@ -495,7 +495,7 @@
     </item>
     <item>
      <property name="text">
-      <string>Extension</string>
+      <string>Name</string>
      </property>
     </item>
    </widget>

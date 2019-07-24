@@ -44,9 +44,10 @@ public:
     void doStrictSearch();
     void updateTagsListWidget();
     void findComments();
-    void findExtensions();
+    void findName();
     void findTags();
     void setTags();
+    void setName();
     void setComment();
 public slots:
     void onEditButtonClicked();
