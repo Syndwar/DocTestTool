@@ -19,6 +19,7 @@ const char * const kInfoDocFile = "info.json";
 const char * const kComment = "comment";
 const char * const kFilename = "filename";
 const char * const kTags = "tags";
+const char * const kTemplates = "templates";
 const QString kUploadFilters = "Documents (*.pdf *.tiff);;Images (*.jpg *.jpeg *.png);;Data Only (*.txt *json *html);;XML (*.xml);;All files (*.*)";
 const char * const kDelimiter = ", ";
 const QString kTagsCombo = "Tags";
@@ -63,9 +64,8 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.searchBtn, SIGNAL(clicked()), this, SLOT(onSearchButtonClicked()));
 
     QObject::connect(ui.backBtn, SIGNAL(clicked()), this, SLOT(onBackButtonClicked()));
-    QObject::connect(ui.editSaveBtn, SIGNAL(clicked()), this, SLOT(onEditSaveButtonClicked()));
     
-    QObject::connect(ui.uploadOkBtn, SIGNAL(clicked()), this, SLOT(onUploadOkButtonClicked()));
+    QObject::connect(ui.okBtn, SIGNAL(clicked()), this, SLOT(onOkButtonClicked()));
 
     QObject::connect(ui.setTextBtn, SIGNAL(clicked()), this, SLOT(onSetTextButtonClicked()));
     QObject::connect(ui.uploadDeleteBtn, SIGNAL(clicked()), this, SLOT(onUploadDeleteButtonClicked()));
@@ -73,17 +73,42 @@ DocTestTool::DocTestTool(QWidget * parent)
 
     QObject::connect(ui.findBtn, SIGNAL(clicked()), this, SLOT(onFindButtonClicked()));
     QObject::connect(ui.saveBtn, SIGNAL(clicked()), this, SLOT(onSaveButtonClicked()));
-    QObject::connect(ui.clearTagBtn, SIGNAL(clicked()), this, SLOT(onClearTagButtonClicked()));
+    QObject::connect(ui.clearBtn, SIGNAL(clicked()), this, SLOT(onClearTagButtonClicked()));
 
     QObject::connect(ui.tagsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onTagsListDoubleClicked(QListWidgetItem *)));
-    QObject::connect(ui.listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onListWidgetClicked(QListWidgetItem *)));
-    QObject::connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onListWidgetDoubleClicked(QListWidgetItem *)));
+    QObject::connect(ui.docsListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onListWidgetClicked(QListWidgetItem *)));
+    QObject::connect(ui.docsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onListWidgetDoubleClicked(QListWidgetItem *)));
 
-    ui.listWidget->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
+    ui.docsListWidget->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
 
     prepareFolders();
     loadConfig();
     loadFilesData();
+}
+
+bool DocTestTool::isUpload() const
+{
+    return ViewMode::Upload == m_viewMode;
+}
+
+bool DocTestTool::isMain() const
+{
+    return ViewMode::Main == m_viewMode;
+}
+
+bool DocTestTool::isEdit() const
+{
+    return ViewMode::Edit == m_viewMode;
+}
+
+bool DocTestTool::isSearch() const
+{
+    return ViewMode::Search == m_viewMode;
+}
+
+void DocTestTool::setMode(const ViewMode mode)
+{
+    m_viewMode = mode;
 }
 
 void DocTestTool::prepareFolders()
@@ -103,16 +128,54 @@ void DocTestTool::prepareFolders()
     QFile tagsFile(getConfigFilePath());
     if (!tagsFile.exists())
     {
-        const QString val = "{\"tags\":[], \"templates\":{}}";
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(val.toUtf8());
-        QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
+        exportTagsToFile(tagsFile);
+    }
+}
 
-        if (tagsFile.open(QIODevice::WriteOnly))
+bool DocTestTool::exportTagsToFile(QFile & file)
+{
+    QString defaultTagsStr;
+    if (!m_defaultTags.isEmpty())
+    {
+        defaultTagsStr.append("\"").append(m_defaultTags.join("\", \"")).append("\"");
+    }
+    QString templatesStr;
+    auto it = m_templates.constBegin();
+    while (it != m_templates.constEnd())
+    {
+        if (!templatesStr.isEmpty())
         {
-            tagsFile.write(json);
-            tagsFile.close();
+            templatesStr.append(", ");
+        }
+        templatesStr.append("\"").append(it.key()).append("\":[");
+        if (!it.value().isEmpty())
+        {
+            templatesStr.append("\"").append(it.value().join("\", \"")).append("\"");
+        }
+        templatesStr.append("]");
+        ++it;
+    }
+
+    const QString valTmpl = "{\"tags\":[%1], \"templates\":{%2}}";
+    const QString val = valTmpl.arg(defaultTagsStr).arg(templatesStr);
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(val.toUtf8());
+    QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
+    if (!jsonDoc.isNull())
+    {
+        if (file.open(QIODevice::WriteOnly))
+        {
+            file.write(json);
+            file.close();
         }
     }
+    else
+    {
+        ui.statusBar->setStyleSheet("color: red");
+        ui.statusBar->showMessage("Json is invalid!", 2000);
+        return false;
+    }
+    return true;
 }
 
 void DocTestTool::loadConfig()
@@ -137,7 +200,7 @@ void DocTestTool::loadConfig()
                 }
             }
             // load templates
-            QJsonValue templatesValue = obj["templates"];
+            QJsonValue templatesValue = obj[kTemplates];
             if (templatesValue.isObject())
             {
                 QJsonObject templObj = templatesValue.toObject();
@@ -242,7 +305,12 @@ DocTestTool::~DocTestTool()
 //========================================
 void DocTestTool::viewMainScreen(const bool value)
 {
-    if (value) m_viewMode = ViewMode::Main;
+    if (value)
+    {
+        setMode(ViewMode::Main);
+        clearWidgets(ClearMode::ClearAll);
+    }
+
     ui.uploadBtn->setVisible(value);
     ui.editBtn->setVisible(value);
     ui.searchBtn->setVisible(value);
@@ -251,19 +319,22 @@ void DocTestTool::viewMainScreen(const bool value)
 
 void DocTestTool::viewSearchScreen(const bool value)
 {
-    if (value) m_viewMode = ViewMode::Search;
+    if (value)
+    {
+        setMode(ViewMode::Search);
+        clearWidgets(ClearMode::ClearAll);
+        
+        m_foundDocsData.clear();
+        addTagsToListWidget();
+        addTemplatesToListWidget();
+    }
 
-    m_foundDocsData.clear();
-
-    updateTagsListWidget();
-    ui.listWidget->clear();
-    ui.uploadTagsTextEdit->clear();
     ui.findBtn->setVisible(value);
-    ui.uploadTagsTextEdit->setVisible(value);
-    ui.listWidget->setVisible(value);
+    ui.inputTextEdit->setVisible(value);
+    ui.docsListWidget->setVisible(value);
     ui.saveBtn->setVisible(value);
     ui.tagsListWidget->setVisible(value);
-    ui.clearTagBtn->setVisible(value);
+    ui.clearBtn->setVisible(value);
     ui.fullMatchBox->setVisible(value);
     ui.uploadDeleteBtn->setVisible(value);
     ui.backBtn->setVisible(value);
@@ -277,18 +348,23 @@ void DocTestTool::viewSearchScreen(const bool value)
 
 void DocTestTool::viewUploadScreen(const bool value)
 {
-    if (value) m_viewMode = ViewMode::Upload;
+    if (value)
+    {
+        setMode(ViewMode::Upload);
+        clearWidgets(ClearMode::ClearAll);
+        
+        addTagsToListWidget();
+        addTemplatesToListWidget();
+    }
 
-    updateTagsListWidget();
-
-    ui.listWidget->setVisible(value);
-    ui.uploadOkBtn->setVisible(value);
+    ui.docsListWidget->setVisible(value);
+    ui.okBtn->setVisible(value);
     ui.setTextBtn->setVisible(value);
     ui.uploadDeleteBtn->setVisible(value);
     ui.uploadAddBtn->setVisible(value);
-    ui.uploadTagsTextEdit->setVisible(value);
+    ui.inputTextEdit->setVisible(value);
     ui.tagsListWidget->setVisible(value);
-    ui.clearTagBtn->setVisible(value);
+    ui.clearBtn->setVisible(value);
     ui.backBtn->setVisible(value);
     ui.progressBar->setVisible(false);
     ui.searchComboBox->setVisible(value);
@@ -298,15 +374,71 @@ void DocTestTool::viewUploadScreen(const bool value)
     ui.label_2->setVisible(value);
 }
 
-void DocTestTool::updateTagsListWidget()
+void DocTestTool::viewEditScreen(const bool value)
 {
-    ui.tagsListWidget->clear();
+    if (value)
+    {
+        setMode(ViewMode::Edit);
+        clearWidgets(ClearMode::ClearAll);
+     
+        addTagsToListWidget();
+    }
 
+    ui.clearBtn->setVisible(value);
+    ui.setTextBtn->setVisible(value);
+    ui.inputTextEdit->setVisible(value);
+    ui.tagsListWidget->setVisible(value);
+    ui.docsListWidget->setVisible(value);
+    ui.okBtn->setVisible(value);
+    ui.backBtn->setVisible(value);
+}
+
+void DocTestTool::clearWidgets(ClearMode mode)
+{
+    if (mode & ClearStatusBar)
+    {
+        ui.statusBar->clearMessage();
+    }
+    if (mode & ClearInputText)
+    {
+        ui.inputTextEdit->clear();
+    }
+    if (mode & ClearTagsList)
+    {
+        ui.tagsListWidget->clear();
+    }
+    if (mode & ClearDocsList)
+    {
+        ui.docsListWidget->clear();
+    }
+    if (mode & ClearTagsBrowser)
+    {
+        ui.tagsBrowser->clear();
+    }
+    if (mode & ClearCommentBrowser)
+    {
+        ui.commentBrowser->clear();
+    }
+}
+
+void DocTestTool::onBackButtonClicked()
+{
+    viewEditScreen(false);
+    viewSearchScreen(false);
+    viewUploadScreen(false);
+    viewMainScreen(true);
+}
+
+void DocTestTool::addTagsToListWidget()
+{
     for (QString & tag : m_defaultTags)
     {
         ui.tagsListWidget->addItem(tag);
     }
+}
 
+void DocTestTool::addTemplatesToListWidget()
+{
     auto it = m_templates.constBegin();
     while (it != m_templates.constEnd())
     {
@@ -315,38 +447,6 @@ void DocTestTool::updateTagsListWidget()
         ui.tagsListWidget->addItem(item);
         ++it;
     }
-}
-
-void DocTestTool::viewEditScreen(const bool value)
-{
-    if (value) m_viewMode = ViewMode::Edit;
-    QFile tagsFile(getConfigFilePath());
-    if (tagsFile.exists())
-    {
-        if (tagsFile.open(QIODevice::ReadOnly))
-        {
-            QByteArray fileData = tagsFile.readAll();
-            ui.editTextWnd->setText(fileData);
-            tagsFile.close();
-        }
-    }
-
-    ui.editTextWnd->setVisible(value);
-    ui.editSaveBtn->setVisible(value);
-    ui.backBtn->setVisible(value);
-}
-
-void DocTestTool::onBackButtonClicked()
-{
-    ui.statusBar->clearMessage();
-    ui.listWidget->clear();
-    ui.editTextWnd->clear();
-    ui.tagsBrowser->clear();
-    ui.commentBrowser->clear();
-    viewEditScreen(false);
-    viewSearchScreen(false);
-    viewUploadScreen(false);
-    viewMainScreen(true);
 }
 
 //========================================
@@ -360,7 +460,6 @@ void DocTestTool::onSearchButtonClicked()
 
 void DocTestTool::onUploadButtonClicked()
 {
-    ui.listWidget->clear();
     m_loadedDocsData.clear();
 
     QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select one or more files to open", QString(), kUploadFilters);
@@ -371,7 +470,7 @@ void DocTestTool::onUploadButtonClicked()
     {
         QListWidgetItem * newItem = new QListWidgetItem;
         newItem->setText(info.fileName);
-        ui.listWidget->addItem(newItem);
+        ui.docsListWidget->addItem(newItem);
     }
 
     if (!fileNames.empty())
@@ -386,44 +485,20 @@ void DocTestTool::onEditButtonClicked()
     viewMainScreen(false);
     viewEditScreen(true);
 }
-//========================================
-// Edit screen
-//========================================
-void DocTestTool::onEditSaveButtonClicked()
-{
-    const QString val = ui.editTextWnd->toPlainText();
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(val.toUtf8());
-    if (!jsonDoc.isNull())
-    {
-        QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
-        QFile tagsFile(getConfigFilePath());
-        if (tagsFile.exists())
-        {
-            QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
 
-            if (tagsFile.open(QIODevice::WriteOnly))
-            {
-                tagsFile.write(json);
-                tagsFile.close();
-            }
-        }
-        loadConfig();
-        ui.statusBar->clearMessage();
-        ui.editTextWnd->clear();
-        viewMainScreen(true);
-        viewEditScreen(false);
-    }
-    else
-    {
-        ui.statusBar->setStyleSheet("color: red");
-        ui.statusBar->showMessage("Json is invalid!", 2000);
-    }
+void DocTestTool::onOkButtonClicked()
+{
+   if (isEdit())
+   {
+       finishEdit();
+   }
+   else if (isUpload())
+   {
+       finishUpload();
+   }
 }
 
-//========================================
-// Upload screen
-//========================================
-void DocTestTool::onUploadOkButtonClicked()
+void DocTestTool::finishUpload()
 {
     if (m_loadedDocsData.isEmpty())
     {
@@ -446,9 +521,9 @@ void DocTestTool::onUploadOkButtonClicked()
     // if tag is missing than set colour to red and scroll to this item
     if (missingTagIndex >= 0)
     {
-        QListWidgetItem * item = ui.listWidget->item(missingTagIndex);
+        QListWidgetItem * item = ui.docsListWidget->item(missingTagIndex);
         item->setTextColor("red");
-        ui.listWidget->scrollToItem(item);
+        ui.docsListWidget->scrollToItem(item);
 
         ui.statusBar->setStyleSheet("color: red");
         ui.statusBar->showMessage("Tag is missing!", 2000);
@@ -481,7 +556,7 @@ void DocTestTool::onUploadOkButtonClicked()
             obj[kFilename] = info.fileName;
             obj[kTags] = QJsonArray::fromStringList(info.tags);
             jsonDoc.setObject(obj);
-            
+
             QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
 
             if (infoFile.open(QIODevice::WriteOnly))
@@ -496,11 +571,27 @@ void DocTestTool::onUploadOkButtonClicked()
     ui.progressBar->setValue(ui.progressBar->maximum());
     ui.progressBar->setVisible(true);
 
-    ui.listWidget->clear();
     viewUploadScreen(false);
     viewMainScreen(true);
 }
 
+void DocTestTool::finishEdit()
+{
+    QFile tagsFile(getConfigFilePath());
+    if (tagsFile.exists())
+    {
+        if (exportTagsToFile(tagsFile))
+        {
+            loadConfig();
+            viewMainScreen(true);
+            viewEditScreen(false);
+        }
+    }
+}
+
+//========================================
+// Upload screen
+//========================================
 void DocTestTool::onUploadAddButtonClicked()
 {
     // TODO check for duplicates
@@ -508,19 +599,19 @@ void DocTestTool::onUploadAddButtonClicked()
 
     loadDocsRepo(fileNames);
 
-    ui.listWidget->clear();
+    clearWidgets(ClearMode::ClearDocsList);
     for (DocInfo & info : m_loadedDocsData)
     {
         QListWidgetItem * newItem = new QListWidgetItem;
         newItem->setText(info.fileName);
-        ui.listWidget->addItem(newItem);
+        ui.docsListWidget->addItem(newItem);
     }
 }
 
 void DocTestTool::onUploadDeleteButtonClicked()
 {
     // get rows
-    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    QModelIndexList indexes = ui.docsListWidget->selectionModel()->selectedIndexes();
     QList<int> indexList;
     for (QModelIndex & index : indexes)
     {
@@ -532,51 +623,58 @@ void DocTestTool::onUploadDeleteButtonClicked()
 
     for (int i : indexList)
     {
-        if (m_viewMode == ViewMode::Upload)
+        if (isUpload())
         {
             m_loadedDocsData.removeAt(i);
         }
-        else if (m_viewMode == ViewMode::Search)
+        else if (isSearch())
         {
             m_foundDocsData.removeAt(i);
         }
     }
 
-    QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
+    QList<QListWidgetItem *> selectedWidgets = ui.docsListWidget->selectedItems();
     for (QListWidgetItem * item : selectedWidgets)
     {
-        ui.listWidget->removeItemWidget(item);
+        ui.docsListWidget->removeItemWidget(item);
         delete item;
     }
 }
 
 void DocTestTool::onSetTextButtonClicked()
 {
-    const QString currentText = ui.searchComboBox->currentText();
-    if (currentText == kTagsCombo)
+    if (isUpload())
     {
-        setTags();
+        const QString currentText = ui.searchComboBox->currentText();
+        if (currentText == kTagsCombo)
+        {
+            setTags();
+        }
+        else if (currentText == kCommentsCombo)
+        {
+            setComment();
+        }
+        else if (currentText == kName)
+        {
+            setName();
+        }
     }
-    else if (currentText == kCommentsCombo)
+    else if (isEdit())
     {
-        setComment();
-    }
-    else if (currentText == kName)
-    {
-        setName();
+        addTags();
     }
 }
 
 void DocTestTool::setTags()
 {
-    const QString text = ui.uploadTagsTextEdit->text();
-    QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
+    const QString text = ui.inputTextEdit->text();
+    QList<QListWidgetItem *> selectedWidgets = ui.docsListWidget->selectedItems();
     for (QListWidgetItem * item : selectedWidgets)
     {
         item->setTextColor(text.isEmpty() ? "black" : "blue");
     }
 
-    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    QModelIndexList indexes = ui.docsListWidget->selectionModel()->selectedIndexes();
     for (QModelIndex & index : indexes)
     {
         const int i = index.row();
@@ -589,7 +687,7 @@ void DocTestTool::setTags()
             }
             else
             {
-                info.tags = text.split(kDelimiter);
+                info.tags = text.simplified().split(kDelimiter);
             }
         }
     }
@@ -597,14 +695,14 @@ void DocTestTool::setTags()
 
 void DocTestTool::setComment()
 {
-    const QString text = ui.uploadTagsTextEdit->text();
-    QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
+    const QString text = ui.inputTextEdit->text();
+    QList<QListWidgetItem *> selectedWidgets = ui.docsListWidget->selectedItems();
     for (QListWidgetItem * item : selectedWidgets)
     {
         item->setTextColor(text.isEmpty() ? "black" : "green");
     }
 
-    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    QModelIndexList indexes = ui.docsListWidget->selectionModel()->selectedIndexes();
     for (QModelIndex & index : indexes)
     {
         const int i = index.row();
@@ -618,14 +716,14 @@ void DocTestTool::setComment()
 
 void DocTestTool::setName()
 {
-    const QString text = ui.uploadTagsTextEdit->text();
-    QList<QListWidgetItem *> selectedWidgets = ui.listWidget->selectedItems();
+    const QString text = ui.inputTextEdit->text();
+    QList<QListWidgetItem *> selectedWidgets = ui.docsListWidget->selectedItems();
     for (QListWidgetItem * item : selectedWidgets)
     {
         item->setText(text);
     }
 
-    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    QModelIndexList indexes = ui.docsListWidget->selectionModel()->selectedIndexes();
     for (QModelIndex & index : indexes)
     {
         const int i = index.row();
@@ -637,14 +735,29 @@ void DocTestTool::setName()
     }
 }
 
+void DocTestTool::addTags()
+{
+    const QString text = ui.inputTextEdit->text();
+    QStringList tags = text.simplified().split(kDelimiter);
+    for (QString & tag : tags)
+    {
+        if (!m_defaultTags.contains(tag))
+        {
+            m_defaultTags.append(tag);
+        }
+    }
+    clearWidgets(ClearMode::ClearTagsList);
+    addTagsToListWidget();
+}
+
 void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
 {
-    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    QModelIndexList indexes = ui.docsListWidget->selectionModel()->selectedIndexes();
     if (indexes.size() > 1) return;
 
     const int i = indexes[0].row();
 
-    if (ViewMode::Upload == m_viewMode)
+    if (isUpload())
     {
         if (i < m_loadedDocsData.size())
         {
@@ -653,7 +766,7 @@ void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
             ui.tagsBrowser->setText(info.tags.join(kDelimiter));
         }
     }
-    else if (ViewMode::Search == m_viewMode)
+    else if (isSearch())
     {
         if (i < m_foundDocsData.size())
         {
@@ -669,7 +782,7 @@ void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
 //========================================
 void DocTestTool::onClearTagButtonClicked()
 {
-    ui.uploadTagsTextEdit->clear();
+    clearWidgets(ClearMode::ClearInputText);
 }
 
 void DocTestTool::onSaveButtonClicked()
@@ -724,9 +837,9 @@ void DocTestTool::onSaveButtonClicked()
 
 void DocTestTool::onTagsListDoubleClicked(QListWidgetItem * item)
 {
-    if (ViewMode::Search != m_viewMode && ViewMode::Upload != m_viewMode) return;
+    if (!isSearch() && !isUpload()) return;
     
-    QLineEdit * editText = ui.uploadTagsTextEdit;
+    QLineEdit * editText = ui.inputTextEdit;
 
     const QString key = item->text();
     if (!key.isEmpty())
@@ -770,7 +883,6 @@ void DocTestTool::onFindButtonClicked()
 
 void DocTestTool::findTags()
 {
-    ui.listWidget->clear();
     m_foundDocsData.clear();
 
     if (ui.fullMatchBox->isChecked())
@@ -782,18 +894,19 @@ void DocTestTool::findTags()
         doGreedySearch();
     }
 
+    clearWidgets(ClearMode::ClearDocsList);
     for (DocInfo & info : m_foundDocsData)
     {
-        ui.listWidget->addItem(info.fileName);
+        ui.docsListWidget->addItem(info.fileName);
     }
 }
 
 void DocTestTool::doGreedySearch()
 {
-    const QString findText = ui.uploadTagsTextEdit->text();
+    const QString findText = ui.inputTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QStringList searchTags = findText.split(kDelimiter);
+        const QStringList searchTags = findText.simplified().split(kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {
@@ -811,10 +924,10 @@ void DocTestTool::doGreedySearch()
 
 void DocTestTool::doStrictSearch()
 {
-    const QString findText = ui.uploadTagsTextEdit->text();
+    const QString findText = ui.inputTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QStringList searchTags = findText.split(kDelimiter);
+        const QStringList searchTags = findText.simplified().split(kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {
@@ -837,13 +950,12 @@ void DocTestTool::doStrictSearch()
 
 void DocTestTool::findComments()
 {
-    ui.listWidget->clear();
     m_foundDocsData.clear();
 
-    const QString findText = ui.uploadTagsTextEdit->text();
+    const QString findText = ui.inputTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QStringList searchTags = findText.split(kDelimiter);
+        const QStringList searchTags = findText.simplified().split(kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {
@@ -858,21 +970,21 @@ void DocTestTool::findComments()
         }
     }
 
+    clearWidgets(ClearMode::ClearDocsList);
     for (DocInfo & info : m_foundDocsData)
     {
-        ui.listWidget->addItem(info.fileName);
+        ui.docsListWidget->addItem(info.fileName);
     }
 }
 
 void DocTestTool::findName()
 {
-    ui.listWidget->clear();
     m_foundDocsData.clear();
 
-    const QString findText = ui.uploadTagsTextEdit->text();
+    const QString findText = ui.inputTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QStringList searchTags = findText.split(kDelimiter);
+        const QStringList searchTags = findText.simplified().split(kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {
@@ -886,16 +998,17 @@ void DocTestTool::findName()
             }
         }
     }
-
+    
+    clearWidgets(ClearMode::ClearDocsList);
     for (DocInfo & info : m_foundDocsData)
     {
-        ui.listWidget->addItem(info.fileName);
+        ui.docsListWidget->addItem(info.fileName);
     }
 }
 
 void DocTestTool::onListWidgetDoubleClicked(QListWidgetItem * item)
 {
-    QModelIndexList indexes = ui.listWidget->selectionModel()->selectedIndexes();
+    QModelIndexList indexes = ui.docsListWidget->selectionModel()->selectedIndexes();
     for (QModelIndex & index : indexes)
     {
         const int i = index.row();

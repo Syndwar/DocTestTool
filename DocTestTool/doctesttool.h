@@ -2,6 +2,7 @@
 #define DOCTESTTOOL_H
 
 #include <QtWidgets/QMainWindow>
+#include <QtCore/QFile>
 #include "ui_doctesttool.h"
 
 struct DocInfo;
@@ -16,6 +17,17 @@ private:
         Upload,
         Edit,
         Search
+    };
+
+    enum ClearMode
+    {
+        ClearStatusBar = 0x00000001,
+        ClearCommentBrowser = 0x0000002,
+        ClearTagsBrowser = 0x00000004,
+        ClearDocsList = 0x00000008,
+        ClearTagsList = 0x00000010,
+        ClearInputText = 0x0000020,
+        ClearAll = 0xFF,
     };
 
     ViewMode m_viewMode;
@@ -42,20 +54,30 @@ public:
     void loadDocsRepo(QStringList & fileNames);
     void doGreedySearch();
     void doStrictSearch();
-    void updateTagsListWidget();
+    void addTagsToListWidget();
+    void addTemplatesToListWidget();
     void findComments();
     void findName();
     void findTags();
     void setTags();
     void setName();
+    void addTags();
     void setComment();
+    void finishEdit();
+    void finishUpload();
+    bool isUpload() const;
+    bool isMain() const;
+    bool isEdit() const;
+    bool isSearch() const;
+    void setMode(const ViewMode mode);
+    void clearWidgets(ClearMode mode);
+    bool exportTagsToFile(QFile & file);
 public slots:
     void onEditButtonClicked();
     void onUploadButtonClicked();
     void onSearchButtonClicked();
-    void onEditSaveButtonClicked();
     void onBackButtonClicked();
-    void onUploadOkButtonClicked();
+    void onOkButtonClicked();
     void onSetTextButtonClicked();
     void onUploadDeleteButtonClicked();
     void onUploadAddButtonClicked();

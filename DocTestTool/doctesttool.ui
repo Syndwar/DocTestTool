@@ -63,46 +63,7 @@
    <string>TagiDoci</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTextEdit" name="editTextWnd">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>951</width>
-      <height>641</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="editSaveBtn">
-    <property name="geometry">
-     <rect>
-      <x>970</x>
-      <y>610</y>
-      <width>42</width>
-      <height>42</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Ok</string>
-    </property>
-    <property name="shortcut">
-     <string>S</string>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QListWidget" name="docsListWidget">
     <property name="geometry">
      <rect>
       <x>660</x>
@@ -123,7 +84,7 @@
      <enum>QAbstractItemView::ExtendedSelection</enum>
     </property>
    </widget>
-   <widget class="QPushButton" name="uploadOkBtn">
+   <widget class="QPushButton" name="okBtn">
     <property name="geometry">
      <rect>
       <x>970</x>
@@ -162,7 +123,7 @@
      <string>T</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="clearTagBtn">
+   <widget class="QPushButton" name="clearBtn">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -270,7 +231,7 @@
      <string>Esc</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="uploadTagsTextEdit">
+   <widget class="QLineEdit" name="inputTextEdit">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -565,18 +526,16 @@
      </font>
     </property>
    </widget>
-   <zorder>setTextBtn</zorder>
-   <zorder>editTextWnd</zorder>
    <zorder>findBtn</zorder>
    <zorder>saveBtn</zorder>
-   <zorder>editSaveBtn</zorder>
-   <zorder>uploadOkBtn</zorder>
-   <zorder>listWidget</zorder>
-   <zorder>clearTagBtn</zorder>
+   <zorder>okBtn</zorder>
+   <zorder>setTextBtn</zorder>
+   <zorder>docsListWidget</zorder>
+   <zorder>clearBtn</zorder>
    <zorder>backBtn</zorder>
    <zorder>uploadAddBtn</zorder>
    <zorder>tagsListWidget</zorder>
-   <zorder>uploadTagsTextEdit</zorder>
+   <zorder>inputTextEdit</zorder>
    <zorder>uploadDeleteBtn</zorder>
    <zorder>fullMatchBox</zorder>
    <zorder>progressBar</zorder>
