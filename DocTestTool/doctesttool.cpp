@@ -24,6 +24,21 @@ QString getDocsFilePath()
     return QDir(Constants::kBaseFolder).filePath(Constants::kDocsFolder);
 }
 
+class Screen
+{
+public:
+    Screen() {}
+    ~Screen() {}
+};
+
+class MainScreen : public Screen
+{
+public:
+    MainScreen() : Screen() {}
+    ~MainScreen() {}
+};
+
+
 DocTestTool::DocTestTool(QWidget * parent)
     : QMainWindow(parent)
     , m_viewMode(ViewMode::Main)
