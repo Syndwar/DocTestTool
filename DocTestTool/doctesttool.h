@@ -7,7 +7,6 @@
 
 struct DocInfo;
 
-
 class DocTestTool : public QMainWindow
 {
     Q_OBJECT
@@ -63,6 +62,7 @@ public:
     void setTags();
     void setName();
     void addTags();
+    void addTemplates();
     void setComment();
     void finishEdit();
     void finishUpload();
@@ -90,6 +90,7 @@ public slots:
     void onTagsListDoubleClicked(QListWidgetItem * item);
     void onListWidgetClicked(QListWidgetItem * item);
     void onListWidgetDoubleClicked(QListWidgetItem * item);
+    void onEditorComboBoxChanged(const QString & text);
 
 private:
     Ui::DocTestToolClass ui;

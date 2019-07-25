@@ -551,7 +551,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QLineEdit" name="inputTextEdit2">
+   <widget class="QTextEdit" name="inputTextEdit2">
     <property name="geometry">
      <rect>
       <x>380</x>
@@ -564,9 +564,6 @@
      <font>
       <pointsize>12</pointsize>
      </font>
-    </property>
-    <property name="whatsThis">
-     <string/>
     </property>
     <property name="placeholderText">
      <string>Enter text here</string>

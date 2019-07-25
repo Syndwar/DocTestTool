@@ -12,7 +12,7 @@
 
 #include "constants.h"
 #include "docinfo.h"
-
+#include "editortemplateitem.h"
 
 QString getConfigFilePath()
 {
@@ -57,6 +57,9 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.tagsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onTagsListDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.docsListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onListWidgetClicked(QListWidgetItem *)));
     QObject::connect(ui.docsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onListWidgetDoubleClicked(QListWidgetItem *)));
+
+    QObject::connect(ui.editorComboBox, SIGNAL(currentTextChanged(const QString &)), this, SLOT(onEditorComboBoxChanged(const QString &)));
+
 
     ui.docsListWidget->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
 
@@ -366,7 +369,8 @@ void DocTestTool::viewEditScreen(const bool value)
     ui.clearBtn->setVisible(value);
     ui.setTextBtn->setVisible(value);
     ui.inputTextEdit->setVisible(value);
-    ui.inputTextEdit2->setVisible(value);
+    ui.inputTextEdit2->setVisible(false);
+    ui.editorComboBox->setCurrentIndex(0);
     ui.tagsListWidget->setVisible(value);
     ui.docsListWidget->setVisible(value);
     ui.okBtn->setVisible(value);
@@ -382,6 +386,7 @@ void DocTestTool::clearWidgets(ClearMode mode)
     if (mode & ClearInputText)
     {
         ui.inputTextEdit->clear();
+        ui.inputTextEdit2->clear();
     }
     if (mode & ClearTagsList)
     {
@@ -423,8 +428,9 @@ void DocTestTool::addTemplatesTo(QListWidget * obj)
     auto it = m_templates.constBegin();
     while (it != m_templates.constEnd())
     {
-        QListWidgetItem * item = new QListWidgetItem(it.key());
+        EditorTemplateItem * item = new EditorTemplateItem(it.key());
         item->setTextColor("blue");
+        item->setTags(it.value());
         obj->addItem(item);
         ++it;
     }
@@ -562,11 +568,12 @@ void DocTestTool::finishEdit()
         m_defaultTags.append(item->text());
     }
 
-    //m_templates.clear();
-    //for (int i = 0, iEnd = ui.docsListWidget->count(); i < iEnd; ++i)
-    //{
-    //    QListWidgetItem * item = ui.docsListWidget->item(i);
-    //}
+    m_templates.clear();
+    for (int i = 0, iEnd = ui.docsListWidget->count(); i < iEnd; ++i)
+    {
+        EditorTemplateItem * item = dynamic_cast<EditorTemplateItem *>(ui.docsListWidget->item(i));
+        m_templates[item->text()] = item->tags();
+    }
 
     QFile tagsFile(getConfigFilePath());
     if (tagsFile.exists())
@@ -669,7 +676,14 @@ void DocTestTool::onSetTextButtonClicked()
     }
     else if (isEdit())
     {
-        addTags();
+        if (ui.editorComboBox->currentText() == Constants::kTagsCombo)
+        {
+            addTags();
+        }
+        else if (ui.editorComboBox->currentText() == Constants::kTemplatesCombo)
+        {
+            addTemplates();
+        }
     }
 }
 
@@ -746,6 +760,14 @@ void DocTestTool::setName()
 void DocTestTool::addTags()
 {
     const QString text = ui.inputTextEdit->text();
+    const QString templatesText = ui.inputTextEdit2->toPlainText();
+    if (text.isEmpty())
+    {
+        ui.statusBar->setStyleSheet("color: red");
+        ui.statusBar->showMessage("Tags are empty!", 2000);
+        return;
+    }
+
     QStringList tags = text.simplified().split(Constants::kDelimiter);
 
     for (int i = 0, iEnd = ui.tagsListWidget->count(); i < iEnd; ++i)
@@ -760,6 +782,44 @@ void DocTestTool::addTags()
     tags.sort();
     ui.tagsListWidget->clear();
     ui.tagsListWidget->addItems(tags);
+}
+
+void DocTestTool::addTemplates()
+{
+    const QString tagsText = ui.inputTextEdit->text();
+    const QString templatesText = ui.inputTextEdit2->toPlainText();
+    if (tagsText.isEmpty() || templatesText.isEmpty())
+    {
+        ui.statusBar->setStyleSheet("color: red");
+        ui.statusBar->showMessage("Templates are empty!", 2000);
+        return;
+    }
+
+    QStringList tags = tagsText.simplified().split(Constants::kDelimiter);
+    tags.sort();
+    QStringList templateTags = templatesText.simplified().split(Constants::kDelimiter);
+    templateTags.sort();
+
+    for (QString & tag : tags)
+    {
+        for (int i = 0, iEnd = ui.docsListWidget->count(); i < iEnd; ++i)
+        {
+            QListWidgetItem * item = ui.docsListWidget->item(i);
+            if (tag == item->text())
+            {
+                ui.docsListWidget->removeItemWidget(item);
+                delete item;
+                break;
+            }
+        }
+    }
+
+    for (QString & tag : tags)
+    {
+        EditorTemplateItem * item = new EditorTemplateItem(tag);
+        item->setTags(templateTags);
+        ui.docsListWidget->addItem(item);
+    }
 }
 
 void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
@@ -789,11 +849,11 @@ void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
     }
     else if (isEdit())
     {
-        QListWidgetItem * item = ui.docsListWidget->item(i);
-        auto it = m_templates.find(item->text());
-        if (it != m_templates.constEnd())
+        if (ui.editorComboBox->currentText() == Constants::kTemplatesCombo)
         {
-            ui.inputTextEdit2->setText(it.value().join(Constants::kDelimiter));
+            EditorTemplateItem * item = dynamic_cast<EditorTemplateItem *>(ui.docsListWidget->item(i));
+            ui.inputTextEdit->setText(item->text());
+            ui.inputTextEdit2->setText(item->tags().join(Constants::kDelimiter));
         }
     }
 }
@@ -855,26 +915,34 @@ void DocTestTool::onSaveButtonClicked()
 
 void DocTestTool::onTagsListDoubleClicked(QListWidgetItem * item)
 {
-    QLineEdit * editText = ui.inputTextEdit;
-
+    const bool isTagsSelected = ui.editorComboBox->currentText() == Constants::kTagsCombo;
     const QString key = item->text();
     if (!key.isEmpty())
     {
         auto it = m_templates.find(key);
         if (it != m_templates.constEnd())
         {
-            editText->setText(it.value().join(Constants::kDelimiter));
-        }
-        else
-        {
-            QString curText = editText->text();
-            if (curText.isEmpty())
+            QString curText = it.value().join(Constants::kDelimiter);
+            if (isTagsSelected)
             {
-                editText->setText(key);
+                ui.inputTextEdit->setText(curText);
             }
             else
             {
-                editText->setText(curText.append(Constants::kDelimiter).append(key));
+                ui.inputTextEdit2->setText(curText);
+            }
+        }
+        else
+        {
+            QString curText = isTagsSelected ? ui.inputTextEdit->text() : ui.inputTextEdit2->toPlainText();
+            curText = curText.isEmpty() ? key : (curText.append(Constants::kDelimiter).append(key));
+            if (isTagsSelected)
+            {
+                ui.inputTextEdit->setText(curText);
+            }
+            else
+            {
+                ui.inputTextEdit2->setText(curText);
             }
         }
     }
@@ -1034,5 +1102,21 @@ void DocTestTool::onListWidgetDoubleClicked(QListWidgetItem * item)
             QDesktopServices::openUrl(QUrl(QString("file:///").append(info.filePath)));
             break;
         }
+    }
+}
+
+void DocTestTool::onEditorComboBoxChanged(const QString & text)
+{
+    if (text == Constants::kTemplatesCombo)
+    {
+        ui.inputTextEdit->clear();
+        ui.inputTextEdit2->clear();
+        ui.inputTextEdit2->setVisible(true);
+    }
+    else if (text == Constants::kTagsCombo)
+    {
+        ui.inputTextEdit->clear();
+        ui.inputTextEdit2->clear();
+        ui.inputTextEdit2->setVisible(false);
     }
 }

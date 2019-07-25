@@ -16,6 +16,7 @@ struct Constants
     static const QString kUploadFilters;
     static const QString kDelimiter;
     static const QString kTagsCombo;
+    static const QString kTemplatesCombo;
     static const QString kCommentsCombo;
     static const QString kName;
 };

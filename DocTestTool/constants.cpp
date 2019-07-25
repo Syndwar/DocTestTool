@@ -11,5 +11,6 @@ const QString Constants::kTemplates = "templates";
 const QString Constants::kUploadFilters = "Documents (*.pdf *.tiff);;Images (*.jpg *.jpeg *.png);;Data Only (*.txt *json *html);;XML (*.xml);;All files (*.*)";
 const QString Constants::kDelimiter = ", ";
 const QString Constants::kTagsCombo = "Tags";
+const QString Constants::kTemplatesCombo = "Templates";
 const QString Constants::kCommentsCombo = "Comments";
 const QString Constants::kName = "Name";
