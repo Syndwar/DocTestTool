@@ -88,6 +88,7 @@ public slots:
     void onClearTagButtonClicked();
     void onFindButtonClicked();
     void onTagsListDoubleClicked(QListWidgetItem * item);
+    void onTagsListClicked(QListWidgetItem * item);
     void onListWidgetClicked(QListWidgetItem * item);
     void onListWidgetDoubleClicked(QListWidgetItem * item);
     void onEditorComboBoxChanged(const QString & text);

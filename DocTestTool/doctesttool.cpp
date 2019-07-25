@@ -54,6 +54,7 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.saveBtn, SIGNAL(clicked()), this, SLOT(onSaveButtonClicked()));
     QObject::connect(ui.clearBtn, SIGNAL(clicked()), this, SLOT(onClearTagButtonClicked()));
 
+    QObject::connect(ui.tagsListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onTagsListClicked(QListWidgetItem *)));
     QObject::connect(ui.tagsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onTagsListDoubleClicked(QListWidgetItem *)));
     QObject::connect(ui.docsListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onListWidgetClicked(QListWidgetItem *)));
     QObject::connect(ui.docsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onListWidgetDoubleClicked(QListWidgetItem *)));
@@ -627,6 +628,13 @@ void DocTestTool::doDeleteTags()
         ui.tagsListWidget->removeItemWidget(tag);
         delete tag;
     }
+
+    QList<QListWidgetItem *> tmpls = ui.docsListWidget->selectedItems();
+    for (QListWidgetItem * tmpl : tmpls)
+    {
+        ui.docsListWidget->removeItemWidget(tmpl);
+        delete tmpl;
+    }
 }
 
 void DocTestTool::doDeleteDocsFrom(QList<DocInfo> & list)
@@ -818,12 +826,27 @@ void DocTestTool::addTemplates()
     {
         EditorTemplateItem * item = new EditorTemplateItem(tag);
         item->setTags(templateTags);
+        item->setTextColor("blue");
         ui.docsListWidget->addItem(item);
+    }
+    ui.docsListWidget->sortItems();
+}
+
+void DocTestTool::onTagsListClicked(QListWidgetItem * item)
+{
+    if (isEdit())
+    {
+        ui.docsListWidget->setCurrentItem(nullptr);
     }
 }
 
 void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
 {
+    if (isEdit())
+    {
+        ui.tagsListWidget->setCurrentItem(nullptr);
+    }
+
     QModelIndexList indexes = ui.docsListWidget->selectionModel()->selectedIndexes();
     if (indexes.size() > 1) return;
 
