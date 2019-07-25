@@ -144,7 +144,7 @@
      <string>Clear</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="uploadDeleteBtn">
+   <widget class="QPushButton" name="deleteBtn">
     <property name="geometry">
      <rect>
       <x>970</x>
@@ -165,7 +165,7 @@
      <string>Del</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="uploadAddBtn">
+   <widget class="QPushButton" name="addBtn">
     <property name="geometry">
      <rect>
       <x>970</x>
@@ -533,10 +533,10 @@
    <zorder>docsListWidget</zorder>
    <zorder>clearBtn</zorder>
    <zorder>backBtn</zorder>
-   <zorder>uploadAddBtn</zorder>
+   <zorder>addBtn</zorder>
    <zorder>tagsListWidget</zorder>
    <zorder>inputTextEdit</zorder>
-   <zorder>uploadDeleteBtn</zorder>
+   <zorder>deleteBtn</zorder>
    <zorder>fullMatchBox</zorder>
    <zorder>progressBar</zorder>
    <zorder>verticalLayoutWidget</zorder>

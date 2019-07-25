@@ -55,7 +55,7 @@ public:
     void doGreedySearch();
     void doStrictSearch();
     void addTagsToListWidget();
-    void addTemplatesToListWidget();
+    void addTemplatesTo(QListWidget * obj);
     void findComments();
     void findName();
     void findTags();
@@ -72,6 +72,8 @@ public:
     void setMode(const ViewMode mode);
     void clearWidgets(ClearMode mode);
     bool exportTagsToFile(QFile & file);
+    void doDeleteTags();
+    void doDeleteDocsFrom(QList<DocInfo> & list);
 public slots:
     void onEditButtonClicked();
     void onUploadButtonClicked();
@@ -79,8 +81,8 @@ public slots:
     void onBackButtonClicked();
     void onOkButtonClicked();
     void onSetTextButtonClicked();
-    void onUploadDeleteButtonClicked();
-    void onUploadAddButtonClicked();
+    void onDeleteButtonClicked();
+    void onAddButtonClicked();
     void onSaveButtonClicked();
     void onClearTagButtonClicked();
     void onFindButtonClicked();
