@@ -110,6 +110,9 @@
     <ClCompile Include="quazip\quazip\zip.c">
       <Filter>Source Files\quazip</Filter>
     </ClCompile>
+    <ClCompile Include="constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="doctesttool.h">
@@ -173,6 +176,12 @@
     </ClInclude>
     <ClInclude Include="quazip\quazip\zip.h">
       <Filter>Source Files\quazip</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="docinfo.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

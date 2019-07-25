@@ -10,39 +10,18 @@
 #include "quazipnewinfo.h"
 #include <algorithm>
 
-namespace
-{
-const char * const kBaseFolder = "base";
-const char * const kDocsFolder = "docs";
-const char * const kDefaultTagsFile = "config.json";
-const char * const kInfoDocFile = "info.json";
-const char * const kComment = "comment";
-const char * const kFilename = "filename";
-const char * const kTags = "tags";
-const char * const kTemplates = "templates";
-const QString kUploadFilters = "Documents (*.pdf *.tiff);;Images (*.jpg *.jpeg *.png);;Data Only (*.txt *json *html);;XML (*.xml);;All files (*.*)";
-const char * const kDelimiter = ", ";
-const QString kTagsCombo = "Tags";
-const QString kCommentsCombo = "Comments";
-const QString kName = "Name";
-}
+#include "constants.h"
+#include "docinfo.h"
 
-struct DocInfo
-{
-    QString filePath;
-    QString fileName;
-    QList<QString> tags;
-    QString comment;
-};
 
 QString getConfigFilePath()
 {
-    return QDir(kBaseFolder).filePath(kDefaultTagsFile);
+    return QDir(Constants::kBaseFolder).filePath(Constants::kDefaultTagsFile);
 }
 
 QString getDocsFilePath()
 {
-    return QDir(kBaseFolder).filePath(kDocsFolder);
+    return QDir(Constants::kBaseFolder).filePath(Constants::kDocsFolder);
 }
 
 DocTestTool::DocTestTool(QWidget * parent)
@@ -118,9 +97,9 @@ void DocTestTool::setMode(const ViewMode mode)
 void DocTestTool::prepareFolders()
 {
     // create base folder
-    if (!QDir(kBaseFolder).exists())
+    if (!QDir(Constants::kBaseFolder).exists())
     {
-        QDir().mkdir(kBaseFolder);
+        QDir().mkdir(Constants::kBaseFolder);
     }
 
     if (!QDir(getDocsFilePath()).exists())
@@ -194,7 +173,7 @@ void DocTestTool::loadConfig()
         if (!obj.isEmpty())
         {
             // load default tags
-            QJsonValue tagsValue = obj[kTags];
+            QJsonValue tagsValue = obj[Constants::kTags];
             if (tagsValue.isArray())
             {
                 QJsonArray array = tagsValue.toArray();
@@ -204,7 +183,7 @@ void DocTestTool::loadConfig()
                 }
             }
             // load templates
-            QJsonValue templatesValue = obj[kTemplates];
+            QJsonValue templatesValue = obj[Constants::kTemplates];
             if (templatesValue.isObject())
             {
                 QJsonObject templObj = templatesValue.toObject();
@@ -233,7 +212,7 @@ void DocTestTool::loadFilesData()
     {
         QFileInfo & info = infoList[i];
         QString path = info.absoluteFilePath();
-        QFile infoFile(QDir(path).absoluteFilePath(kInfoDocFile));
+        QFile infoFile(QDir(path).absoluteFilePath(Constants::kInfoDocFile));
         if (infoFile.open(QIODevice::ReadOnly))
         {
             QByteArray fileData = infoFile.readAll();
@@ -243,7 +222,7 @@ void DocTestTool::loadFilesData()
             {
                 DocInfo docInfo;
                 // load default tags
-                QJsonValue tagsValue = obj[kTags];
+                QJsonValue tagsValue = obj[Constants::kTags];
                 if (tagsValue.isArray())
                 {
                     QJsonArray array = tagsValue.toArray();
@@ -253,12 +232,12 @@ void DocTestTool::loadFilesData()
                     }
                 }
                 // load templates
-                QJsonValue commentValue = obj[kComment];
+                QJsonValue commentValue = obj[Constants::kComment];
                 if (commentValue.isString())
                 {
                     docInfo.comment = commentValue.toString();
                 }
-                QJsonValue fileValue = obj[kFilename];
+                QJsonValue fileValue = obj[Constants::kFilename];
                 if (fileValue.isString())
                 {
                     docInfo.fileName = fileValue.toString();
@@ -382,12 +361,12 @@ void DocTestTool::viewEditScreen(const bool value)
         addTemplatesTo(ui.docsListWidget);
     }
 
-    ui.label->setVisible(value);
-    ui.tagsBrowser->setVisible(value);
+    ui.editorComboBox->setVisible(value);
     ui.deleteBtn->setVisible(value);
     ui.clearBtn->setVisible(value);
     ui.setTextBtn->setVisible(value);
     ui.inputTextEdit->setVisible(value);
+    ui.inputTextEdit2->setVisible(value);
     ui.tagsListWidget->setVisible(value);
     ui.docsListWidget->setVisible(value);
     ui.okBtn->setVisible(value);
@@ -461,7 +440,7 @@ void DocTestTool::onUploadButtonClicked()
 {
     m_loadedDocsData.clear();
 
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select one or more files to open", QString(), kUploadFilters);
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select one or more files to open", QString(), Constants::kUploadFilters);
 
     loadDocsRepo(fileNames);
 
@@ -546,14 +525,14 @@ void DocTestTool::finishUpload()
             const QString filepath = QDir(folderPath).filePath(info.fileName);
             file.copy(filepath);
 
-            const QString infoPath = QDir(folderPath).filePath(kInfoDocFile);
+            const QString infoPath = QDir(folderPath).filePath(Constants::kInfoDocFile);
             QFile infoFile(infoPath);
             const QString val = "{}";
             QJsonDocument jsonDoc = QJsonDocument::fromJson(val.toUtf8());
             QJsonObject obj = jsonDoc.object();
-            obj[kComment] = info.comment;
-            obj[kFilename] = info.fileName;
-            obj[kTags] = QJsonArray::fromStringList(info.tags);
+            obj[Constants::kComment] = info.comment;
+            obj[Constants::kFilename] = info.fileName;
+            obj[Constants::kTags] = QJsonArray::fromStringList(info.tags);
             jsonDoc.setObject(obj);
 
             QByteArray json = jsonDoc.toJson(QJsonDocument::Indented);
@@ -604,7 +583,7 @@ void DocTestTool::finishEdit()
 void DocTestTool::onAddButtonClicked()
 {
     // TODO check for duplicates
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select one or more files to open", QString(), kUploadFilters);
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select one or more files to open", QString(), Constants::kUploadFilters);
 
     loadDocsRepo(fileNames);
 
@@ -675,15 +654,15 @@ void DocTestTool::onSetTextButtonClicked()
     if (isUpload())
     {
         const QString currentText = ui.searchComboBox->currentText();
-        if (currentText == kTagsCombo)
+        if (currentText == Constants::kTagsCombo)
         {
             setTags();
         }
-        else if (currentText == kCommentsCombo)
+        else if (currentText == Constants::kCommentsCombo)
         {
             setComment();
         }
-        else if (currentText == kName)
+        else if (currentText == Constants::kName)
         {
             setName();
         }
@@ -716,7 +695,7 @@ void DocTestTool::setTags()
             }
             else
             {
-                info.tags = text.simplified().split(kDelimiter);
+                info.tags = text.simplified().split(Constants::kDelimiter);
             }
         }
     }
@@ -767,7 +746,7 @@ void DocTestTool::setName()
 void DocTestTool::addTags()
 {
     const QString text = ui.inputTextEdit->text();
-    QStringList tags = text.simplified().split(kDelimiter);
+    QStringList tags = text.simplified().split(Constants::kDelimiter);
 
     for (int i = 0, iEnd = ui.tagsListWidget->count(); i < iEnd; ++i)
     {
@@ -796,7 +775,7 @@ void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
         {
             const DocInfo & info = m_loadedDocsData[i];
             ui.commentBrowser->setText(info.comment);
-            ui.tagsBrowser->setText(info.tags.join(kDelimiter));
+            ui.tagsBrowser->setText(info.tags.join(Constants::kDelimiter));
         }
     }
     else if (isSearch())
@@ -805,7 +784,7 @@ void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
         {
             const DocInfo & info = m_foundDocsData[i];
             ui.commentBrowser->setText(info.comment);
-            ui.tagsBrowser->setText(info.tags.join(kDelimiter));
+            ui.tagsBrowser->setText(info.tags.join(Constants::kDelimiter));
         }
     }
     else if (isEdit())
@@ -814,7 +793,7 @@ void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
         auto it = m_templates.find(item->text());
         if (it != m_templates.constEnd())
         {
-            ui.tagsBrowser->setText(it.value().join(kDelimiter));
+            ui.inputTextEdit2->setText(it.value().join(Constants::kDelimiter));
         }
     }
 }
@@ -884,7 +863,7 @@ void DocTestTool::onTagsListDoubleClicked(QListWidgetItem * item)
         auto it = m_templates.find(key);
         if (it != m_templates.constEnd())
         {
-            editText->setText(it.value().join(kDelimiter));
+            editText->setText(it.value().join(Constants::kDelimiter));
         }
         else
         {
@@ -895,7 +874,7 @@ void DocTestTool::onTagsListDoubleClicked(QListWidgetItem * item)
             }
             else
             {
-                editText->setText(curText.append(kDelimiter).append(key));
+                editText->setText(curText.append(Constants::kDelimiter).append(key));
             }
         }
     }
@@ -904,15 +883,15 @@ void DocTestTool::onTagsListDoubleClicked(QListWidgetItem * item)
 void DocTestTool::onFindButtonClicked()
 {
     const QString currentText = ui.searchComboBox->currentText();
-    if (currentText == kTagsCombo)
+    if (currentText == Constants::kTagsCombo)
     {
         findTags();
     }
-    else if (currentText == kCommentsCombo)
+    else if (currentText == Constants::kCommentsCombo)
     {
         findComments();
     }
-    else if (currentText == kName)
+    else if (currentText == Constants::kName)
     {
         findName();
     }
@@ -943,7 +922,7 @@ void DocTestTool::doGreedySearch()
     const QString findText = ui.inputTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QStringList searchTags = findText.simplified().split(kDelimiter);
+        const QStringList searchTags = findText.simplified().split(Constants::kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {
@@ -964,7 +943,7 @@ void DocTestTool::doStrictSearch()
     const QString findText = ui.inputTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QStringList searchTags = findText.simplified().split(kDelimiter);
+        const QStringList searchTags = findText.simplified().split(Constants::kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {
@@ -992,7 +971,7 @@ void DocTestTool::findComments()
     const QString findText = ui.inputTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QStringList searchTags = findText.simplified().split(kDelimiter);
+        const QStringList searchTags = findText.simplified().split(Constants::kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {
@@ -1021,7 +1000,7 @@ void DocTestTool::findName()
     const QString findText = ui.inputTextEdit->text();
     if (!findText.isEmpty())
     {
-        const QStringList searchTags = findText.simplified().split(kDelimiter);
+        const QStringList searchTags = findText.simplified().split(Constants::kDelimiter);
 
         for (DocInfo & info : m_folderDocsData)
         {

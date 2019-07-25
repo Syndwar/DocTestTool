@@ -7,6 +7,7 @@
 
 struct DocInfo;
 
+
 class DocTestTool : public QMainWindow
 {
     Q_OBJECT

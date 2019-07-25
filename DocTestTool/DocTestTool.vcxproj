@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="constants.cpp" />
     <ClCompile Include="doctesttool.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_doctesttool.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -148,6 +149,8 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="docinfo.h" />
     <ClInclude Include="GeneratedFiles\ui_doctesttool.h" />
     <ClInclude Include="quazip\quazip\crypt.h" />
     <ClInclude Include="quazip\quazip\ioapi.h" />
@@ -210,7 +213,6 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" Qt5Version_x0020_Win32="qt5.7.0" MocOptions="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
