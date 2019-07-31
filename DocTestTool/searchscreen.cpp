@@ -120,10 +120,22 @@ void SearchScreen::processUserEvent(Screen::UserEvent event)
         break;
         case Screen::UserEvent::DeleteBtnClicked:
         {
-            deleteFromDocs();
+            if (ui_->actionDelete_From_Disk->isChecked())
+            {
+                deleteFromDisk();
+            }
+            else
+            {
+               deleteFromDocs();
+            }
         }
         break;
     }
+}
+
+void SearchScreen::deleteFromDisk()
+{
+
 }
 
 void SearchScreen::deleteFromDocs()

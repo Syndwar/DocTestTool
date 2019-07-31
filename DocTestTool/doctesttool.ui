@@ -655,6 +655,8 @@
      <string>Menu</string>
     </property>
     <addaction name="actionExit"/>
+    <addaction name="separator"/>
+    <addaction name="actionDelete_From_Disk"/>
    </widget>
    <widget class="QMenu" name="menuExport">
     <property name="font">
@@ -725,6 +727,14 @@
     <font>
      <pointsize>12</pointsize>
     </font>
+   </property>
+  </action>
+  <action name="actionDelete_From_Disk">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Delete From Disk</string>
    </property>
   </action>
  </widget>

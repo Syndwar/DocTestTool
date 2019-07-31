@@ -56,8 +56,8 @@ DocTestTool::DocTestTool(QWidget * parent)
 
 
     prepareFolders();
-    save_data_.loadConfig();
-    save_data_.loadFilesData();
+    save_.loadConfig();
+    save_.loadFilesData();
 
     switchToScreen(ScreenId::Main);
 }
@@ -200,22 +200,22 @@ void DocTestTool::switchToScreen(ScreenId id)
     {
         case ScreenId::Main:
         {
-            screen_ = new MainScreen(this, &ui, &save_data_);
+            screen_ = new MainScreen(this, &ui, &save_);
         }
         break;
         case ScreenId::Search:
         {
-            screen_ = new SearchScreen(this, &ui, &save_data_);
+            screen_ = new SearchScreen(this, &ui, &save_);
         }
         break;
         case ScreenId::Upload:
         {
-            screen_ = new UploadScreen(this, &ui, &save_data_);
+            screen_ = new UploadScreen(this, &ui, &save_);
         }
         break;
         case ScreenId::Edit:
         {
-            screen_ = new EditScreen(this, &ui, &save_data_);
+            screen_ = new EditScreen(this, &ui, &save_);
         }
         break;
     }
@@ -238,7 +238,7 @@ void DocTestTool::prepareFolders()
     QFile tagsFile(SaveData::getConfigFilePath());
     if (!tagsFile.exists() && screen_)
     {
-        if (!save_data_.exportTagsToFile(tagsFile))
+        if (!save_.exportTagsToFile(tagsFile))
         {
             ui.statusBar->setStyleSheet("color: red");
             ui.statusBar->showMessage("Json is invalid!", 2000);

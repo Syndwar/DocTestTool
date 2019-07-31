@@ -23,7 +23,7 @@ private:
     };
 
     Screen * screen_;
-    SaveData save_data_;
+    SaveData save_;
 
 public:
     DocTestTool(QWidget * parent = Q_NULLPTR);

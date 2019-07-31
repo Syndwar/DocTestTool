@@ -21,10 +21,12 @@ private:
     void doStrictSearch();
     //
     void findName();
-    //
+    // save files to hard drive based on search results
     void save();
-    //
+    // delete files from search result
     void deleteFromDocs();
+    // delete files from hard drive
+    void deleteFromDisk();
 public:
     //
     SearchScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save);

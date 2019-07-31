@@ -249,7 +249,7 @@ void EditScreen::finishEdit()
         if (save_->exportTagsToFile(tagsFile))
         {
             save_->loadConfig();
-            //switchToScreen(ScreenId::Main);
+            ui_->backBtn->click();
         }
         else
         {
@@ -257,5 +257,4 @@ void EditScreen::finishEdit()
             ui_->statusBar->showMessage("Json is invalid!", 2000);
         }
     }
-    save_->default_tags.sort();
 }

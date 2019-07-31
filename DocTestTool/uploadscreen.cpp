@@ -384,5 +384,5 @@ void UploadScreen::finishUpload()
     ui_->progressBar->setValue(ui_->progressBar->maximum());
     ui_->progressBar->setVisible(true);
 
-    //switchToScreen(ScreenId::Main);
+    ui_->backBtn->click();
 }
