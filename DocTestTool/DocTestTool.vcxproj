@@ -79,6 +79,7 @@
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="doctesttool.cpp" />
     <ClCompile Include="editortemplateitem.cpp" />
+    <ClCompile Include="editscreen.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_doctesttool.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -114,6 +115,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainscreen.cpp" />
     <ClCompile Include="quazip\quazip\JlCompress.cpp" />
     <ClCompile Include="quazip\quazip\qioapi.cpp" />
     <ClCompile Include="quazip\quazip\quaadler32.cpp" />
@@ -127,6 +129,10 @@
     <ClCompile Include="quazip\quazip\quazipnewinfo.cpp" />
     <ClCompile Include="quazip\quazip\unzip.c" />
     <ClCompile Include="quazip\quazip\zip.c" />
+    <ClCompile Include="savedata.cpp" />
+    <ClCompile Include="screen.cpp" />
+    <ClCompile Include="searchscreen.cpp" />
+    <ClCompile Include="uploadscreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="doctesttool.h">
@@ -156,6 +162,12 @@
   <ItemGroup>
     <ClInclude Include="constants.h" />
     <ClInclude Include="docinfo.h" />
+    <ClInclude Include="editscreen.h" />
+    <ClInclude Include="mainscreen.h" />
+    <ClInclude Include="savedata.h" />
+    <ClInclude Include="screen.h" />
+    <ClInclude Include="searchscreen.h" />
+    <ClInclude Include="uploadscreen.h" />
     <CustomBuild Include="editortemplateitem.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing editortemplateitem.h...</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing editortemplateitem.h...</Message>

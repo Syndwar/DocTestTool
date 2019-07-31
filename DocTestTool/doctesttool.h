@@ -4,77 +4,34 @@
 #include <QtWidgets/QMainWindow>
 #include <QtCore/QFile>
 #include "ui_doctesttool.h"
+#include "savedata.h"
 
+class Screen;
 struct DocInfo;
 
 class DocTestTool : public QMainWindow
 {
     Q_OBJECT
 private:
-    enum class ViewMode
+
+    enum class ScreenId
     {
         Main = 0,
+        Search,
         Upload,
         Edit,
-        Search
     };
 
-    enum ClearMode
-    {
-        ClearStatusBar = 0x00000001,
-        ClearCommentBrowser = 0x0000002,
-        ClearTagsBrowser = 0x00000004,
-        ClearDocsList = 0x00000008,
-        ClearTagsList = 0x00000010,
-        ClearInputText = 0x0000020,
-        ClearAll = 0xFF,
-    };
-
-    ViewMode m_viewMode;
-
-    QStringList m_defaultTags; // list of default tags
-    QMap<QString, QStringList> m_templates; // templates with tag lists
-    int m_docsCount; // amount of files found in the folder
-    QList<DocInfo> m_loadedDocsData;  // files that are loaded into application and are processed
-    QList<DocInfo> m_folderDocsData; // files that are stored in the app folder
-    QList<DocInfo> m_foundDocsData; // files that are found using search filter
+    Screen * screen_;
+    SaveData save_data_;
 
 public:
-    DocTestTool(QWidget *parent = 0);
+    DocTestTool(QWidget * parent = Q_NULLPTR);
     
     ~DocTestTool();
 
-    void viewMainScreen(const bool value);
-    void viewUploadScreen(const bool value);
-    void viewSearchScreen(const bool value);
-    void viewEditScreen(const bool value);
+    void switchToScreen(ScreenId id);
     void prepareFolders();
-    void loadConfig();
-    void loadFilesData();
-    void loadDocsRepo(QStringList & fileNames);
-    void doGreedySearch();
-    void doStrictSearch();
-    void addTagsToListWidget();
-    void addTemplatesTo(QListWidget * obj);
-    void findComments();
-    void findName();
-    void findTags();
-    void setTags();
-    void setName();
-    void addTags();
-    void addTemplates();
-    void setComment();
-    void finishEdit();
-    void finishUpload();
-    bool isUpload() const;
-    bool isMain() const;
-    bool isEdit() const;
-    bool isSearch() const;
-    void setMode(const ViewMode mode);
-    void clearWidgets(ClearMode mode);
-    bool exportTagsToFile(QFile & file);
-    void doDeleteTags();
-    void doDeleteDocsFrom(QList<DocInfo> & list);
 public slots:
     void onEditButtonClicked();
     void onUploadButtonClicked();
