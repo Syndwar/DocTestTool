@@ -17,6 +17,7 @@
 #include "editscreen.h"
 #include "uploadscreen.h"
 #include "searchscreen.h"
+#include "loginscreen.h"
 
 //=============================================================================
 // class DocTestTool
@@ -44,6 +45,7 @@ DocTestTool::DocTestTool(QWidget * parent)
     QObject::connect(ui.findBtn, SIGNAL(clicked()), this, SLOT(onFindButtonClicked()));
     QObject::connect(ui.saveBtn, SIGNAL(clicked()), this, SLOT(onSaveButtonClicked()));
     QObject::connect(ui.clearBtn, SIGNAL(clicked()), this, SLOT(onClearTagButtonClicked()));
+    QObject::connect(ui.loginBtn, SIGNAL(clicked()), this, SLOT(onLoginButtonClicked()));
 
     QObject::connect(ui.tagsListWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onTagsListClicked(QListWidgetItem *)));
     QObject::connect(ui.tagsListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onTagsListDoubleClicked(QListWidgetItem *)));
@@ -54,12 +56,7 @@ DocTestTool::DocTestTool(QWidget * parent)
 
     ui.docsListWidget->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
 
-
-    prepareFolders();
-    save_.loadConfig();
-    save_.loadFilesData();
-
-    switchToScreen(ScreenId::Main);
+    switchToScreen(ScreenId::Login);
 }
 
 DocTestTool::~DocTestTool()
@@ -175,6 +172,14 @@ void DocTestTool::onClearTagButtonClicked()
     }
 }
 
+void DocTestTool::onLoginButtonClicked()
+{
+    if (screen_)
+    {
+        screen_->processUserEvent(Screen::UserEvent::LoginButtonClicked);
+    }
+}
+
 void DocTestTool::onListWidgetClicked(QListWidgetItem * item)
 {
     if (screen_)
@@ -220,30 +225,10 @@ void DocTestTool::switchToScreen(ScreenId id)
             screen_ = new EditScreen(this, &ui, &save_);
         }
         break;
-    }
-}
-
-void DocTestTool::prepareFolders()
-{
-    // create base folder
-    if (!QDir(Constants::kBaseFolder).exists())
-    {
-        QDir().mkdir(Constants::kBaseFolder);
-    }
-
-    if (!QDir(SaveData::getDocsFilePath()).exists())
-    {
-        QDir().mkdir(SaveData::getDocsFilePath());
-    }
-
-    // create file for default tags
-    QFile tagsFile(SaveData::getConfigFilePath());
-    if (!tagsFile.exists() && screen_)
-    {
-        if (!save_.exportTagsToFile(tagsFile))
+        case ScreenId::Login:
         {
-            ui.statusBar->setStyleSheet("color: red");
-            ui.statusBar->showMessage("Json is invalid!", 2000);
+            screen_ = new LoginScreen(this, &ui, &save_);
         }
+        break;
     }
 }

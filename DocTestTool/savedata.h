@@ -9,10 +9,12 @@ struct DocInfo;
 
 struct SaveData
 {
-    QStringList default_tags; // list of default tags
+    QString workingFolder; // path to the database folder
+    QStringList defaultTags; // list of default tags
     QMap<QString, QStringList> templates; // templates with tag lists
-    int docs_count = 0; // amount of files found in the folder
-    QList<DocInfo> folder_docs_data; // files that are stored in the app folder
+    QList<DocInfo> folderDocsData; // files that are stored in the app folder
+    //
+    bool prepareFolders();
     //
     void loadConfig();
     //
@@ -20,9 +22,9 @@ struct SaveData
     //
     bool exportTagsToFile(QFile & file);
     //
-    static QString getConfigFilePath();
+    QString getConfigFilePath();
     //
-    static QString getDocsFilePath();
+    QString getDocsFilePath();
 };
 
 #endif // SAVE_DATA_H

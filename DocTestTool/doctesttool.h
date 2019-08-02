@@ -20,6 +20,7 @@ private:
         Search,
         Upload,
         Edit,
+        Login,
     };
 
     Screen * screen_;
@@ -43,6 +44,7 @@ public slots:
     void onAddButtonClicked();
     void onSaveButtonClicked();
     void onClearTagButtonClicked();
+    void onLoginButtonClicked();
     void onFindButtonClicked();
     void onTagsListDoubleClicked(QListWidgetItem * item);
     void onTagsListClicked(QListWidgetItem * item);

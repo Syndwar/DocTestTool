@@ -1,6 +1,7 @@
 #include "searchscreen.h"
 
 #include <QFileDialog>
+#include <QDesktopServices>
 #include "quazip.h"
 #include "quazipfile.h"
 #include "quazipnewinfo.h"
@@ -15,9 +16,9 @@
 SearchScreen::SearchScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save)
     : Screen(parent, ui, save)
 {
-    found_docs_data_.clear();
+    foundDocsData_.clear();
 
-    for (QString & tag : save_->default_tags)
+    for (QString & tag : save_->defaultTags)
     {
         ui->tagsListWidget->addItem(tag);
     }
@@ -88,13 +89,18 @@ void SearchScreen::processUserEvent(Screen::UserEvent event)
             if (indexes.size() == 1)
             {
                 const int i = indexes[0].row();
-                if (i < found_docs_data_.size())
+                if (i < foundDocsData_.size())
                 {
-                    const DocInfo & info = found_docs_data_[i];
+                    const DocInfo & info = foundDocsData_[i];
                     ui_->commentBrowser->setText(info.comment);
                     ui_->tagsBrowser->setText(info.tags.join(Constants::kDelimiter));
                 }
             }
+        }
+        break;
+        case Screen::UserEvent::DocsListDoubleClicked:
+        {
+            openSelectedDoc();
         }
         break;
         case Screen::UserEvent::TagsListDoubleClicked:
@@ -123,6 +129,8 @@ void SearchScreen::processUserEvent(Screen::UserEvent event)
             if (ui_->actionDelete_From_Disk->isChecked())
             {
                 deleteFromDisk();
+                deleteFromDocs();
+                save_->loadFilesData();
             }
             else
             {
@@ -133,9 +141,39 @@ void SearchScreen::processUserEvent(Screen::UserEvent event)
     }
 }
 
+void SearchScreen::openSelectedDoc()
+{
+    QModelIndexList indexes = ui_->docsListWidget->selectionModel()->selectedIndexes();
+    for (QModelIndex & index : indexes)
+    {
+        const int i = index.row();
+        if (i < foundDocsData_.size())
+        {
+            DocInfo & info = foundDocsData_[i];
+            QDesktopServices::openUrl(QUrl::fromLocalFile(info.filePath));
+            break;
+        }
+    }
+}
+
 void SearchScreen::deleteFromDisk()
 {
+    // get rows
+    QModelIndexList indexes = ui_->docsListWidget->selectionModel()->selectedIndexes();
 
+    for (QModelIndex & index : indexes)
+    {
+        const int i = index.row();
+        if (i < foundDocsData_.size())
+        {
+            DocInfo & docInfo = foundDocsData_[i];
+            QFile file(docInfo.filePath);
+            QFileInfo fileInfo(file);
+            QString path = fileInfo.path();
+            QDir fileDir(path);
+            fileDir.removeRecursively();
+        }
+    }
 }
 
 void SearchScreen::deleteFromDocs()
@@ -161,13 +199,13 @@ void SearchScreen::deleteFromDocs()
 
     for (int i : indexList)
     {
-        found_docs_data_.removeAt(i);
+        foundDocsData_.removeAt(i);
     }
 }
 
 void SearchScreen::save()
 {
-    if (found_docs_data_.size() == 0)
+    if (foundDocsData_.size() == 0)
     {
         ui_->statusBar->setStyleSheet("color: red");
         ui_->statusBar->showMessage("No files to save!", 2000);
@@ -190,8 +228,8 @@ void SearchScreen::save()
         if (zip.open(QuaZip::mdCreate))
         {
             int i = 0;
-            ui_->progressBar->setMaximum(found_docs_data_.size());
-            for (DocInfo & info : found_docs_data_)
+            ui_->progressBar->setMaximum(foundDocsData_.size());
+            for (DocInfo & info : foundDocsData_)
             {
                 QFile inFile(info.filePath);
                 if (inFile.open(QIODevice::ReadOnly))
@@ -217,7 +255,7 @@ void SearchScreen::save()
 
 void SearchScreen::findTags()
 {
-    found_docs_data_.clear();
+    foundDocsData_.clear();
 
     if (ui_->fullMatchBox->isChecked())
     {
@@ -229,7 +267,7 @@ void SearchScreen::findTags()
     }
 
     clearWidgets(ClearMode::ClearDocsList);
-    for (DocInfo & info : found_docs_data_)
+    for (DocInfo & info : foundDocsData_)
     {
         ui_->docsListWidget->addItem(info.fileName);
     }
@@ -242,13 +280,13 @@ void SearchScreen::doGreedySearch()
     {
         const QStringList searchTags = findText.simplified().split(Constants::kDelimiter);
 
-        for (DocInfo & info : save_->folder_docs_data)
+        for (DocInfo & info : save_->folderDocsData)
         {
             for (const QString & tag : searchTags)
             {
                 if (info.tags.contains(tag))
                 {
-                    found_docs_data_.append(info);
+                    foundDocsData_.append(info);
                     break;
                 }
             }
@@ -263,7 +301,7 @@ void SearchScreen::doStrictSearch()
     {
         const QStringList searchTags = findText.simplified().split(Constants::kDelimiter);
 
-        for (DocInfo & info : save_->folder_docs_data)
+        for (DocInfo & info : save_->folderDocsData)
         {
             bool isValid = true;
             for (const QString & tag : searchTags)
@@ -276,7 +314,7 @@ void SearchScreen::doStrictSearch()
             }
             if (isValid)
             {
-                found_docs_data_.append(info);
+                foundDocsData_.append(info);
             }
         }
     }
@@ -284,20 +322,20 @@ void SearchScreen::doStrictSearch()
 
 void SearchScreen::findComments()
 {
-    found_docs_data_.clear();
+    foundDocsData_.clear();
 
     const QString findText = ui_->inputTextEdit->text();
     if (!findText.isEmpty())
     {
         const QStringList searchTags = findText.simplified().split(Constants::kDelimiter);
 
-        for (DocInfo & info : save_->folder_docs_data)
+        for (DocInfo & info : save_->folderDocsData)
         {
             for (const QString & tag : searchTags)
             {
                 if (info.comment.contains(tag))
                 {
-                    found_docs_data_.append(info);
+                    foundDocsData_.append(info);
                     break;
                 }
             }
@@ -305,7 +343,7 @@ void SearchScreen::findComments()
     }
 
     clearWidgets(ClearMode::ClearDocsList);
-    for (DocInfo & info : found_docs_data_)
+    for (DocInfo & info : foundDocsData_)
     {
         ui_->docsListWidget->addItem(info.fileName);
     }
@@ -313,20 +351,20 @@ void SearchScreen::findComments()
 
 void SearchScreen::findName()
 {
-    found_docs_data_.clear();
+    foundDocsData_.clear();
 
     const QString findText = ui_->inputTextEdit->text();
     if (!findText.isEmpty())
     {
         const QStringList searchTags = findText.simplified().split(Constants::kDelimiter);
 
-        for (DocInfo & info : save_->folder_docs_data)
+        for (DocInfo & info : save_->folderDocsData)
         {
             for (const QString & tag : searchTags)
             {
                 if (info.fileName.contains(tag))
                 {
-                    found_docs_data_.append(info);
+                    foundDocsData_.append(info);
                     break;
                 }
             }
@@ -334,7 +372,7 @@ void SearchScreen::findName()
     }
 
     clearWidgets(ClearMode::ClearDocsList);
-    for (DocInfo & info : found_docs_data_)
+    for (DocInfo & info : foundDocsData_)
     {
         ui_->docsListWidget->addItem(info.fileName);
     }

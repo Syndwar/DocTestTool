@@ -9,7 +9,7 @@ struct DocInfo;
 class SearchScreen : public Screen
 {
 private:
-    QList<DocInfo> found_docs_data_; // files that are found using search filter
+    QList<DocInfo> foundDocsData_; // files that are found using search filter
 private:
     //
     void findComments();
@@ -27,6 +27,8 @@ private:
     void deleteFromDocs();
     // delete files from hard drive
     void deleteFromDisk();
+    //
+    void openSelectedDoc();
 public:
     //
     SearchScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save);

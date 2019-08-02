@@ -569,6 +569,51 @@
      <string>Enter text here</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="loginTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>230</y>
+      <width>901</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="whatsThis">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>Enter path to database here</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="loginBtn">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>300</y>
+      <width>261</width>
+      <height>42</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Login</string>
+    </property>
+   </widget>
    <zorder>findBtn</zorder>
    <zorder>saveBtn</zorder>
    <zorder>okBtn</zorder>
@@ -590,6 +635,8 @@
    <zorder>commentBrowser</zorder>
    <zorder>editorComboBox</zorder>
    <zorder>inputTextEdit2</zorder>
+   <zorder>loginTextEdit</zorder>
+   <zorder>loginBtn</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -654,9 +701,9 @@
     <property name="title">
      <string>Menu</string>
     </property>
-    <addaction name="actionExit"/>
-    <addaction name="separator"/>
     <addaction name="actionDelete_From_Disk"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuExport">
     <property name="font">

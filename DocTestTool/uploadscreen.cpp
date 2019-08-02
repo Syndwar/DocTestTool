@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QCryptographicHash>
 
 #include "constants.h"
 #include "docinfo.h"
@@ -16,7 +17,7 @@
 UploadScreen::UploadScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save)
     : Screen(parent, ui, save)
 {
-    for (QString & tag : save_->default_tags)
+    for (QString & tag : save_->defaultTags)
     {
         ui->tagsListWidget->addItem(tag);
     }
@@ -52,13 +53,13 @@ UploadScreen::~UploadScreen()
 
 bool UploadScreen::init()
 {
-    loaded_docs_data_.clear();
+    loadedDocsData_.clear();
 
     QStringList fileNames = QFileDialog::getOpenFileNames(parent_, "Select one or more files to open", QString(), Constants::kUploadFilters);
 
     loadDocs(fileNames);
 
-    for (DocInfo & info : loaded_docs_data_)
+    for (DocInfo & info : loadedDocsData_)
     {
         QListWidgetItem * newItem = new QListWidgetItem;
         newItem->setText(info.fileName);
@@ -77,7 +78,7 @@ void UploadScreen::loadDocs(QStringList & fileNames)
     for (QString & fileName : fileNames)
     {
         bool duplicate = false;
-        for (const DocInfo & info : loaded_docs_data_)
+        for (const DocInfo & info : loadedDocsData_)
         {
             if (info.filePath == fileName)
             {
@@ -94,7 +95,7 @@ void UploadScreen::loadDocs(QStringList & fileNames)
             DocInfo docInfo;
             docInfo.filePath = fileName;
             docInfo.fileName = info.fileName();
-            loaded_docs_data_.append(docInfo);
+            loadedDocsData_.append(docInfo);
         }
     }
 }
@@ -167,9 +168,9 @@ void UploadScreen::processUserEvent(Screen::UserEvent event)
             if (indexes.size() == 1)
             {
                 const int i = indexes[0].row();
-                if (i < loaded_docs_data_.size())
+                if (i < loadedDocsData_.size())
                 {
-                    const DocInfo & info = loaded_docs_data_[i];
+                    const DocInfo & info = loadedDocsData_[i];
                     ui_->commentBrowser->setText(info.comment);
                     ui_->tagsBrowser->setText(info.tags.join(Constants::kDelimiter));
                 }
@@ -191,7 +192,7 @@ void UploadScreen::addToDocs()
     loadDocs(fileNames);
 
     clearWidgets(ClearMode::ClearDocsList);
-    for (DocInfo & info : loaded_docs_data_)
+    for (DocInfo & info : loadedDocsData_)
     {
         QListWidgetItem * newItem = new QListWidgetItem;
         newItem->setText(info.fileName);
@@ -222,7 +223,7 @@ void UploadScreen::deleteFromDocs()
 
     for (int i : indexList)
     {
-        loaded_docs_data_.removeAt(i);
+        loadedDocsData_.removeAt(i);
     }
 }
 
@@ -232,9 +233,9 @@ void UploadScreen::openSelectedDoc()
     for (QModelIndex & index : indexes)
     {
         const int i = index.row();
-        if (i < loaded_docs_data_.size())
+        if (i < loadedDocsData_.size())
         {
-            DocInfo & info = loaded_docs_data_[i];
+            DocInfo & info = loadedDocsData_[i];
             QDesktopServices::openUrl(QUrl(QString("file:///").append(info.filePath)));
             break;
         }
@@ -254,9 +255,9 @@ void UploadScreen::setTags()
     for (QModelIndex & index : indexes)
     {
         const int i = index.row();
-        if (i < loaded_docs_data_.size())
+        if (i < loadedDocsData_.size())
         {
-            DocInfo & info = loaded_docs_data_[i];
+            DocInfo & info = loadedDocsData_[i];
             if (text.isEmpty())
             {
                 info.tags.clear();
@@ -282,9 +283,9 @@ void UploadScreen::setComment()
     for (QModelIndex & index : indexes)
     {
         const int i = index.row();
-        if (i < loaded_docs_data_.size())
+        if (i < loadedDocsData_.size())
         {
-            DocInfo & info = loaded_docs_data_[i];
+            DocInfo & info = loadedDocsData_[i];
             info.comment = text;
         }
     }
@@ -303,9 +304,9 @@ void UploadScreen::setName()
     for (QModelIndex & index : indexes)
     {
         const int i = index.row();
-        if (i < loaded_docs_data_.size())
+        if (i < loadedDocsData_.size())
         {
-            DocInfo & info = loaded_docs_data_[i];
+            DocInfo & info = loadedDocsData_[i];
             info.fileName = text;
         }
     }
@@ -313,7 +314,7 @@ void UploadScreen::setName()
 
 void UploadScreen::finishUpload()
 {
-    if (loaded_docs_data_.isEmpty())
+    if (loadedDocsData_.isEmpty())
     {
         ui_->statusBar->setStyleSheet("color: red");
         ui_->statusBar->showMessage("Add documents!", 2000);
@@ -322,9 +323,9 @@ void UploadScreen::finishUpload()
 
     // check if all documents has tags
     int missingTagIndex = -1;
-    for (int i = 0, iEnd = loaded_docs_data_.size(); i < iEnd; ++i)
+    for (int i = 0, iEnd = loadedDocsData_.size(); i < iEnd; ++i)
     {
-        DocInfo & info = loaded_docs_data_[i];
+        DocInfo & info = loadedDocsData_[i];
         if (info.tags.empty())
         {
             missingTagIndex = i;
@@ -345,15 +346,30 @@ void UploadScreen::finishUpload()
 
     ui_->progressBar->setVisible(true);
     ui_->progressBar->setValue(0);
-    ui_->progressBar->setMaximum(loaded_docs_data_.size());
-    for (DocInfo & info : loaded_docs_data_)
+    ui_->progressBar->setMaximum(loadedDocsData_.size());
+    for (DocInfo & info : loadedDocsData_)
     {
         QFile file(info.filePath);
         QFileInfo fileInfo(file);
 
-        QString folderPath(SaveData::getDocsFilePath());
-        ++save_->docs_count;
-        folderPath.append("/").append(QString::number(save_->docs_count));
+        QString md5;
+        if (file.open(QFile::ReadOnly))
+        {
+            QCryptographicHash hash(QCryptographicHash::Md5);
+            if (hash.addData(&file))
+            {
+                md5 = hash.result().toHex();
+            }
+            file.close();
+        }
+
+        if (md5.isEmpty())
+        {
+            return;
+        }
+
+        QString folderPath(save_->getDocsFilePath());
+        folderPath.append("/").append(md5);
         if (!QDir(folderPath).exists())
         {
             QDir().mkdir(folderPath);

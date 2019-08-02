@@ -28,6 +28,7 @@ public:
         DocsListClicked,
         DocsListDoubleClicked,
         EditComboBoxChanged,
+        LoginButtonClicked,
     };
 protected:
     enum ClearMode

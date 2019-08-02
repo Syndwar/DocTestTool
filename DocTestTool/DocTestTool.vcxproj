@@ -114,6 +114,7 @@
     <ClCompile Include="GeneratedFiles\Release\moc_quazipfile.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="loginscreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainscreen.cpp" />
     <ClCompile Include="quazip\quazip\JlCompress.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="docinfo.h" />
     <ClInclude Include="editscreen.h" />
+    <ClInclude Include="loginscreen.h" />
     <ClInclude Include="mainscreen.h" />
     <ClInclude Include="savedata.h" />
     <ClInclude Include="screen.h" />

@@ -10,9 +10,37 @@
 #include "screen.h"
 #include "docinfo.h"
 
+bool SaveData::prepareFolders()
+{
+    // create base folder
+    if (!QDir(workingFolder).exists())
+    {
+        if (!QDir(Constants::kBaseFolder).exists())
+        {
+            QDir().mkdir(Constants::kBaseFolder);
+        }
+    }
+
+    if (!QDir(getDocsFilePath()).exists())
+    {
+        QDir().mkdir(getDocsFilePath());
+    }
+
+    // create file for default tags
+    QFile tagsFile(getConfigFilePath());
+    if (!tagsFile.exists())
+    {
+        if (!exportTagsToFile(tagsFile))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 void SaveData::loadConfig()
 {
-    default_tags.clear();
+    defaultTags.clear();
     QFile tagsFile(SaveData::getConfigFilePath());
     if (tagsFile.open(QIODevice::ReadOnly))
     {
@@ -28,7 +56,7 @@ void SaveData::loadConfig()
                 QJsonArray array = tagsValue.toArray();
                 for (int i = 0, iEnd = array.size(); i < iEnd; ++i)
                 {
-                    default_tags.push_back(array[i].toString());
+                    defaultTags.push_back(array[i].toString());
                 }
             }
             // load templates
@@ -48,25 +76,33 @@ void SaveData::loadConfig()
         }
         tagsFile.close();
     }
-    default_tags.sort();
+    defaultTags.sort();
 }
 
 QString SaveData::getConfigFilePath()
 {
+    if (QDir(workingFolder).exists())
+    {
+        return QDir(workingFolder).filePath(Constants::kDefaultTagsFile);
+    }
     return QDir(Constants::kBaseFolder).filePath(Constants::kDefaultTagsFile);
 }
 
 QString SaveData::getDocsFilePath()
 {
+    if (QDir(workingFolder).exists())
+    {
+        return QDir(workingFolder).filePath(Constants::kDocsFolder);
+    }
     return QDir(Constants::kBaseFolder).filePath(Constants::kDocsFolder);
 }
 
 bool SaveData::exportTagsToFile(QFile & file)
 {
     QString defaultTagsStr;
-    if (!default_tags.isEmpty())
+    if (!defaultTags.isEmpty())
     {
-        defaultTagsStr.append("\"").append(default_tags.join("\", \"")).append("\"");
+        defaultTagsStr.append("\"").append(defaultTags.join("\", \"")).append("\"");
     }
     QString templatesStr;
     auto it = templates.constBegin();
@@ -107,12 +143,11 @@ bool SaveData::exportTagsToFile(QFile & file)
 
 void SaveData::loadFilesData()
 {
-    folder_docs_data.clear();
+    folderDocsData.clear();
 
     QDir docsDir(SaveData::getDocsFilePath());
     QFileInfoList infoList = docsDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-    docs_count = infoList.size();
-    for (int i = 0; i < docs_count; ++i)
+    for (int i = 0, iEnd = infoList.size(); i < iEnd; ++i)
     {
         QFileInfo & info = infoList[i];
         QString path = info.absoluteFilePath();
@@ -149,7 +184,7 @@ void SaveData::loadFilesData()
 
                 docInfo.filePath = QDir(path).absoluteFilePath(docInfo.fileName);
 
-                folder_docs_data.append(docInfo);
+                folderDocsData.append(docInfo);
             }
             infoFile.close();
         }

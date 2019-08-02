@@ -140,6 +140,9 @@
     <ClCompile Include="savedata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="loginscreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="doctesttool.h">
@@ -229,6 +232,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="savedata.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loginscreen.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

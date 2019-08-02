@@ -12,6 +12,8 @@ Screen::Screen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save)
 {
     clearWidgets(ClearMode::ClearAll);
 
+    ui_->loginBtn->setVisible(false);
+    ui_->loginTextEdit->setVisible(false);
     ui_->uploadBtn->setVisible(false);
     ui_->editBtn->setVisible(false);
     ui_->searchBtn->setVisible(false);

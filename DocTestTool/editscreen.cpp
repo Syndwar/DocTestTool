@@ -11,7 +11,7 @@
 EditScreen::EditScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save)
     : Screen(parent, ui, save)
 {
-    for (QString & tag : save_->default_tags)
+    for (QString & tag : save_->defaultTags)
     {
         ui->tagsListWidget->addItem(tag);
     }
@@ -229,11 +229,11 @@ void EditScreen::deleteTags()
 
 void EditScreen::finishEdit()
 {
-    save_->default_tags.clear();
+    save_->defaultTags.clear();
     for (int i = 0, iEnd = ui_->tagsListWidget->count(); i < iEnd; ++i)
     {
         QListWidgetItem * item = ui_->tagsListWidget->item(i);
-        save_->default_tags.append(item->text());
+        save_->defaultTags.append(item->text());
     }
 
     save_->templates.clear();
@@ -243,7 +243,7 @@ void EditScreen::finishEdit()
         save_->templates[item->text()] = item->tags();
     }
 
-    QFile tagsFile(SaveData::getConfigFilePath());
+    QFile tagsFile(save_->getConfigFilePath());
     if (tagsFile.exists())
     {
         if (save_->exportTagsToFile(tagsFile))

@@ -9,7 +9,7 @@ struct SaveData;
 class UploadScreen : public Screen
 {
 private:
-    QList<DocInfo> loaded_docs_data_;  // files that are loaded into application and are processed
+    QList<DocInfo> loadedDocsData_;  // files that are loaded into application and are processed
 private:
     //
     void setTags();
