@@ -67,6 +67,7 @@ DocTestTool::~DocTestTool()
     if (screen_)
     {
         delete screen_;
+        screen_ = nullptr;
     }
 }
 
@@ -195,6 +196,7 @@ void DocTestTool::switchToScreen(ScreenId id)
     if (screen_)
     {
         delete screen_;
+        screen_ = nullptr;
     }
     switch (id)
     {
