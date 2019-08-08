@@ -12,7 +12,7 @@ public:
     //
     MainScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save);
     //
-    ~MainScreen();
+    virtual ~MainScreen();
     //
     virtual bool isMain() const override { return true; }
     //

@@ -52,7 +52,7 @@ public:
     //
     Screen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save);
     //
-    ~Screen();
+    virtual ~Screen();
     //
     virtual bool isMain() const { return false; }
     //

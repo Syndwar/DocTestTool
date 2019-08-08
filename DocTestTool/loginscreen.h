@@ -11,7 +11,7 @@ public:
     //
     LoginScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save);
     //
-    ~LoginScreen();
+    virtual ~LoginScreen();
     //
     virtual void processUserEvent(Screen::UserEvent event) override;
 };

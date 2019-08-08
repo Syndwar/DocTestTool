@@ -19,7 +19,7 @@ public:
     //
     EditScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save);
     //
-    ~EditScreen();
+    virtual ~EditScreen();
     //
     virtual bool isEdit() const override { return true; }
     //

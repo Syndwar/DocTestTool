@@ -41,10 +41,6 @@ UploadScreen::UploadScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData
     ui->clearBtn->setVisible(true);
     ui->backBtn->setVisible(true);
     ui->searchComboBox->setVisible(true);
-    ui->tagsBrowser->setVisible(true);
-    ui->commentBrowser->setVisible(true);
-    ui->label->setVisible(true);
-    ui->label_2->setVisible(true);
 }
 
 UploadScreen::~UploadScreen()
@@ -173,6 +169,11 @@ void UploadScreen::processUserEvent(Screen::UserEvent event)
                     const DocInfo & info = loadedDocsData_[i];
                     ui_->commentBrowser->setText(info.comment);
                     ui_->tagsBrowser->setText(info.tags.join(Constants::kDelimiter));
+
+                    ui_->tagsBrowser->show();
+                    ui_->commentBrowser->show();
+                    ui_->tagsLbl->show();
+                    ui_->commentLbl->show();
                 }
             }
         }

@@ -5,6 +5,8 @@
 #include "quazip.h"
 #include "quazipfile.h"
 #include "quazipnewinfo.h"
+#include "QTimer"
+#include "QThread"
 
 #include "constants.h"
 #include "docinfo.h"
@@ -42,14 +44,29 @@ SearchScreen::SearchScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData
     ui->deleteBtn->setVisible(true);
     ui->backBtn->setVisible(true);
     ui->searchComboBox->setVisible(true);
-    ui->tagsBrowser->setVisible(true);
-    ui->commentBrowser->setVisible(true);
-    ui->label->setVisible(true);
-    ui->label_2->setVisible(true);
+
+    timer_ = new QTimer();
+    QObject::connect(timer_, &QTimer::timeout, [&]() {onTimerElapsed(); });
+    timer_->start(1000);
 }
 
 SearchScreen::~SearchScreen()
 {
+    if (timer_)
+    {
+        timer_->stop();
+        delete timer_;
+        timer_ = nullptr;
+    }
+}
+
+void SearchScreen::onTimerElapsed()
+{
+    const bool isSelected = !ui_->docsListWidget->selectedItems().empty();
+    ui_->tagsLbl->setVisible(isSelected);
+    ui_->commentLbl->setVisible(isSelected);
+    ui_->tagsBrowser->setVisible(isSelected);
+    ui_->commentBrowser->setVisible(isSelected);
 }
 
 void SearchScreen::processUserEvent(Screen::UserEvent event)
@@ -92,6 +109,17 @@ void SearchScreen::processUserEvent(Screen::UserEvent event)
                 if (i < foundDocsData_.size())
                 {
                     const DocInfo & info = foundDocsData_[i];
+
+                    ui_->tagsLbl->show();
+                    ui_->commentLbl->show();
+                    ui_->commentBrowser->show();
+                    ui_->tagsBrowser->show();
+
+                    ui_->commentBrowser->setText("...");
+                    ui_->tagsBrowser->setText("...");
+
+                    QThread::msleep(500);
+
                     ui_->commentBrowser->setText(info.comment);
                     ui_->tagsBrowser->setText(info.tags.join(Constants::kDelimiter));
                 }

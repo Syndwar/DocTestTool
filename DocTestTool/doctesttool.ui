@@ -460,7 +460,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="tagsLbl">
     <property name="geometry">
      <rect>
       <x>480</x>
@@ -478,7 +478,7 @@
      <string>Tags:</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="commentLbl">
     <property name="geometry">
      <rect>
       <x>470</x>
@@ -632,8 +632,8 @@
    <zorder>progressBar</zorder>
    <zorder>verticalLayoutWidget</zorder>
    <zorder>searchComboBox</zorder>
-   <zorder>label</zorder>
-   <zorder>label_2</zorder>
+   <zorder>tagsLbl</zorder>
+   <zorder>commentLbl</zorder>
    <zorder>tagsBrowser</zorder>
    <zorder>commentBrowser</zorder>
    <zorder>editorComboBox</zorder>

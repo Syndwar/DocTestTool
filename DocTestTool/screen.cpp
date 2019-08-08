@@ -31,8 +31,8 @@ Screen::Screen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save)
     ui_->searchComboBox->setVisible(false);
     ui_->tagsBrowser->setVisible(false);
     ui_->commentBrowser->setVisible(false);
-    ui_->label->setVisible(false);
-    ui_->label_2->setVisible(false);
+    ui_->tagsLbl->setVisible(false);
+    ui_->commentLbl->setVisible(false);
     ui_->okBtn->setVisible(false);
     ui_->setTextBtn->setVisible(false);
     ui_->addBtn->setVisible(false);

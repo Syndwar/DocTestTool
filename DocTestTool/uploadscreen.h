@@ -31,7 +31,7 @@ public:
     //
     UploadScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save);
     //
-    ~UploadScreen();
+    virtual ~UploadScreen();
     //
     virtual bool init() override;
     //

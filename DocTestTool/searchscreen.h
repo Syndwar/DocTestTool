@@ -10,6 +10,8 @@ class SearchScreen : public Screen
 {
 private:
     QList<DocInfo> foundDocsData_; // files that are found using search filter
+
+    QTimer * timer_;
 private:
     //
     void findComments();
@@ -29,11 +31,13 @@ private:
     void deleteFromDisk();
     //
     void openSelectedDoc();
+    //
+    void onTimerElapsed();
 public:
     //
     SearchScreen(QWidget * parent, Ui::DocTestToolClass * ui, SaveData * save);
     //
-    ~SearchScreen();
+    virtual ~SearchScreen();
     //
     virtual bool isSearch() const override { return true; }
     //
